@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "11351257467",
+    "project_id": "task-management-app-flut-68cdf",
+    "storage_bucket": "task-management-app-flut-68cdf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11351257467:android:8982a712599f4c373c8dde",
+        "android_client_info": {
+          "package_name": "com.example.task_management_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9NAs6w8G_jv77HxUx3P5XoREtso4gAHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
