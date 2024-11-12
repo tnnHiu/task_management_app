@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_management_app/blocs/auth/auth_bloc.dart';
 import 'package:task_management_app/blocs/home_page_navigation/home_page_navigation_bloc.dart';
 import 'package:task_management_app/pages/calendar_page.dart';
+import 'package:task_management_app/pages/focus_page.dart';
 import 'package:task_management_app/pages/widgets/app_widget.dart';
 
 class HomePage extends StatelessWidget {
@@ -15,7 +17,12 @@ class HomePage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           actions: [
-            Icon(Icons.more_vert),
+            IconButton(
+              onPressed: () {
+                context.read<AuthBloc>().add(SignOutEvent());
+              },
+              icon: Icon(Icons.more_vert),
+            ),
             const SizedBox(width: 12),
           ],
         ),
@@ -40,7 +47,7 @@ class HomePage extends StatelessWidget {
         case 2:
           return Center(child: Text("Tasks Page"));
         case 3:
-          return Center(child: Text("Notifications Page"));
+          return FocusPage();
         case 4:
           return Center(child: Text("More"));
         default:
