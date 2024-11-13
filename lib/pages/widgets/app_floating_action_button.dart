@@ -13,7 +13,14 @@ class AppFloatingActionButton extends StatelessWidget {
         return FloatingActionButton(
           shape: CircleBorder(),
           backgroundColor: Colors.blue,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddTaskPage(),
+              ),
+            );
+          },
           elevation: 0,
           highlightElevation: 0,
           child: Icon(

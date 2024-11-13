@@ -29,8 +29,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthGateEvent event,
     Emitter<AuthState> emit,
   ) async {
-    if (await _auth.authStateChanges().isEmpty) {
-      emit(AuthFailure(errMessage: "User not logged in"));
+    if (_auth.currentUser == null) {
+      emit(AuthInitial());
     } else {
       emit(AuthSuccess());
     }

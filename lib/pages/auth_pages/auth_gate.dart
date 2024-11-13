@@ -12,13 +12,13 @@ class AuthGate extends StatelessWidget {
     return Scaffold(
       body: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
+          context.read<AuthBloc>().add(AuthGateEvent());
           if (state is AuthInitial) {
             return const SignInOrSignUp();
           } else if (state is AuthSuccess) {
             return HomePage();
           } else {
             return CircularProgressIndicator();
-            ;
           }
         },
       ),

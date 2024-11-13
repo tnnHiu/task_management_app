@@ -4,15 +4,23 @@ import 'package:task_management_app/blocs/auth/auth_bloc.dart';
 import 'package:task_management_app/blocs/home_page_navigation/home_page_navigation_bloc.dart';
 import 'package:task_management_app/pages/calendar_page.dart';
 import 'package:task_management_app/pages/focus_page.dart';
+import 'package:task_management_app/pages/task_pages/task_page.dart';
 import 'package:task_management_app/pages/widgets/app_widget.dart';
+
+import '../blocs/calendar/calendar_bloc.dart';
+import '../blocs/task/task_bloc.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomePageNavigationBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => HomePageNavigationBloc()),
+        BlocProvider(create: (context) => TaskBloc()),
+        BlocProvider(create: (context) => CalendarBloc()),
+      ],
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -41,7 +49,7 @@ class HomePage extends StatelessWidget {
       int selectedIndex = state.selectedIndex;
       switch (selectedIndex) {
         case 0:
-          return Center(child: Text("To do Page"));
+          return TaskPage();
         case 1:
           return CalendarPage();
         case 2:
