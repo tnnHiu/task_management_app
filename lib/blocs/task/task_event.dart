@@ -26,7 +26,6 @@ class AddTaskEvent extends TaskEvent {
 
 class UpdateTaskEvent extends TaskEvent {
   final TaskModel updatedTask;
-
   UpdateTaskEvent({required this.updatedTask});
 }
 

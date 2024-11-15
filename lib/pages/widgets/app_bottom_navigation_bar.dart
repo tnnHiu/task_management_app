@@ -13,29 +13,41 @@ class AppBottomNavigationBar extends StatelessWidget {
         return BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.add_box_sharp),
+              icon: Icon(
+                Icons.add_box_sharp,
+              ),
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month),
+              icon: Icon(
+                Icons.calendar_month,
+              ),
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.task),
+              icon: Icon(
+                Icons.task,
+              ),
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.center_focus_strong),
+              icon: Icon(
+                Icons.center_focus_strong,
+              ),
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.more_horiz_sharp),
+              icon: Icon(
+                Icons.more_horiz_sharp,
+              ),
               label: "",
             ),
           ],
           selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.white38,
           currentIndex: selectedIndex,
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
+          backgroundColor: Color(0xFF242424),
           type: BottomNavigationBarType.fixed,
           elevation: 0,
           onTap: (index) {

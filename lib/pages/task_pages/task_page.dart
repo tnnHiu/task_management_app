@@ -22,6 +22,7 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF242424),
       body: BlocBuilder<TaskBloc, TaskState>(
         builder: (context, state) {
           if (state is TaskLoading) {
@@ -38,10 +39,18 @@ class _TaskPageState extends State<TaskPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Chưa hoàn thành", style: TextStyle(fontSize: 16)),
-                  Expanded(child: _buildTaskList(tasks: incompleteTasks)),
-                  Text("Đã hoàn thành", style: TextStyle(fontSize: 16)),
-                  Expanded(child: _buildTaskList(tasks: completedTasks)),
+                  Text("Chưa hoàn thành",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      )),
+                  _buildTaskList(tasks: incompleteTasks),
+                  Text("Đã hoàn thành",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      )),
+                  _buildTaskList(tasks: completedTasks),
                 ],
               ),
             );
@@ -56,26 +65,28 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Widget _buildTaskList({required List<TaskModel> tasks}) {
-    return ListView.builder(
-      itemCount: tasks.length,
-      itemBuilder: (context, index) {
-        final task = tasks[index];
-        return TaskItem(
-          taskId: task.id,
-          text: task.name,
-          isCompleted: true,
-          date: task.deadline,
-          description: task.description,
-          priority: task.priority,
-          flagColor: task.priority == 'Cao'
-              ? Colors.red
-              : task.priority == 'Vừa'
-                  ? Colors.yellow
-                  : task.priority == 'Thấp'
-                      ? Colors.blue
-                      : Colors.white,
-        );
-      },
+    return Expanded(
+      child: ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          final task = tasks[index];
+          return TaskItem(
+            taskId: task.id,
+            text: task.name,
+            isCompleted: task.isCompleted,
+            date: task.deadline,
+            description: task.description,
+            priority: task.priority,
+            flagColor: task.priority == 'Cao'
+                ? Colors.red
+                : task.priority == 'Vừa'
+                    ? Colors.yellow
+                    : task.priority == 'Thấp'
+                        ? Colors.blue
+                        : Colors.white,
+          );
+        },
+      ),
     );
   }
 }

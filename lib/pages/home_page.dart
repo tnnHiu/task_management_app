@@ -23,10 +23,12 @@ class HomePage extends StatelessWidget {
       ],
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          // backgroundColor: Colors.white,
+          backgroundColor: Color(0xFF242424),
           actions: [
             IconButton(
               onPressed: () {
+                // Tạm thời để sign out ở đây
                 context.read<AuthBloc>().add(SignOutEvent());
               },
               icon: Icon(Icons.more_vert),
@@ -34,7 +36,6 @@ class HomePage extends StatelessWidget {
             const SizedBox(width: 12),
           ],
         ),
-        backgroundColor: Colors.white,
         body: _buildSelectedPage(),
         floatingActionButton: AppFloatingActionButton(),
         bottomNavigationBar: AppBottomNavigationBar(),

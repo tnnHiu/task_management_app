@@ -32,7 +32,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Color(0xFF242424),
+      appBar: AppBar(backgroundColor: Color(0xFF242424)),
       body: BlocProvider(
         create: (context) => TaskBloc(),
         child: BlocBuilder<TaskBloc, TaskState>(builder: (context, state) {
@@ -229,6 +230,5 @@ class _AddTaskPageState extends State<AddTaskPage> {
         duration: Duration(seconds: 2),
       ),
     );
-    // Navigator.pop(context);
   }
 }

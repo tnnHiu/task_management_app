@@ -9,7 +9,7 @@ class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF242424),
       body: Column(
         children: [
           BlocBuilder<CalendarBloc, CalendarState>(
@@ -31,6 +31,20 @@ class CalendarPage extends StatelessWidget {
                     CalendarFormat.month: 'Month',
                     CalendarFormat.week: 'Week',
                   },
+                  calendarStyle: CalendarStyle(
+                    defaultTextStyle: TextStyle(color: Colors.white),
+                    weekendTextStyle: TextStyle(color: Colors.white38),
+                    selectedTextStyle: TextStyle(color: Colors.white),
+                    todayTextStyle: TextStyle(color: Colors.white),
+                    todayDecoration: BoxDecoration(
+                      color: Colors.blue,
+                      shape: BoxShape.circle,
+                    ),
+                    selectedDecoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
                 );
               }
               return CircularProgressIndicator();
