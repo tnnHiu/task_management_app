@@ -84,3 +84,17 @@ dependencies:
   google_fonts: ^6.2.1
 ```
 và chạy lệnh "flutter pub get" để chạy các thư viện
+## Thiết lập firebase 
+1. Tạo dự án Firebase
+-- Truy cập Firebase Console.
+-- Nhấn vào Add project (Thêm dự án).
+-- Đặt tên dự án và nhấn Continue (Tiếp tục).
+-- Bật Google Analytics (tùy chọn) và nhấn Continue.
+-- Đợi Firebase tạo dự án xong và nhấn Continue để vào bảng điều khiển.
+2. Thêm ứng dụng vào Firebase
+-- Trong bảng điều khiển Firebase, chọn Add app (Thêm ứng dụng).
+-- Chọn biểu tượng flutter
+-- Nhập Package name (tên gói) của ứng dụng Flutter. Tên này cần khớp với applicationId trong android/app/build.gradle.
+-- Điền các thông tin khác và nhấn Register app (Đăng ký ứng dụng).
+3. Tải xuống tệp cấu hình
+flutter tải xuống file cấu hình và sẽ hướng dẫn đặt file cấu hình tương ứng cho nền tảng muốn sử dụng
