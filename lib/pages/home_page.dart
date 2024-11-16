@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:task_management_app/blocs/auth/auth_bloc.dart';
+// import 'package:googleapis/calendar/v3.dart';
+// import 'package:task_management_app/blocs/auth/auth_bloc.dart';
 import 'package:task_management_app/blocs/home_page_navigation/home_page_navigation_bloc.dart';
-import 'package:task_management_app/pages/calendar_page.dart';
+// import 'package:task_management_app/pages/calendar_page.dart';
 import 'package:task_management_app/pages/focus_page.dart';
 import 'package:task_management_app/pages/task_pages/task_page.dart';
 import 'package:task_management_app/pages/widgets/app_widget.dart';
-
-import '../blocs/calendar/calendar_bloc.dart';
+import 'calendar.dart';
+import '../blocs/events/event_bloc.dart';
 import '../blocs/task/task_bloc.dart';
 
 class HomePage extends StatelessWidget {
@@ -19,23 +20,11 @@ class HomePage extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => HomePageNavigationBloc()),
         BlocProvider(create: (context) => TaskBloc()),
-        BlocProvider(create: (context) => CalendarBloc()),
+        // BlocProvider(create: (context) => CalendarBloc()),
+        BlocProvider(create: (context) => EventBloc()),
       ],
       child: Scaffold(
-        appBar: AppBar(
-          // backgroundColor: Colors.white,
-          backgroundColor: Color(0xFF242424),
-          actions: [
-            IconButton(
-              onPressed: () {
-                // Tạm thời để sign out ở đây
-                context.read<AuthBloc>().add(SignOutEvent());
-              },
-              icon: Icon(Icons.more_vert),
-            ),
-            const SizedBox(width: 12),
-          ],
-        ),
+        
         body: _buildSelectedPage(),
         floatingActionButton: AppFloatingActionButton(),
         bottomNavigationBar: AppBottomNavigationBar(),

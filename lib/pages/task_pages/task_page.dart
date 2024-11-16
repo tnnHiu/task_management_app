@@ -23,6 +23,33 @@ class _TaskPageState extends State<TaskPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF242424),
+      appBar: AppBar(
+          backgroundColor: Color(0xFF353535),
+          // backgroundColor: Colors.white,
+          title: Text(
+              'Nhiệm vụ',
+              style: TextStyle(
+                color: Color.fromARGB(255, 255, 255, 255), 
+              ),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.menu, color: Color.fromARGB(255, 255, 255, 255)),
+            onPressed: () {
+              // menu
+            },
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                // Tạm thời để sign out ở đây
+                // context.read<AuthBloc>().add(SignOutEvent());
+              },
+              icon: Icon(Icons.more_vert),
+            ),
+            const SizedBox(width: 12),
+          ],
+        ),
       body: BlocBuilder<TaskBloc, TaskState>(
         builder: (context, state) {
           if (state is TaskLoading) {
