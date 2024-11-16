@@ -21,7 +21,9 @@ class SignInPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _header(context),
-                _inputField(context),
+                _inputField(context,
+                    emailController: emailController,
+                    passwordController: passwordController),
                 _forgotPassword(context),
                 _signup(context),
                 _googleSignInButton(context),
@@ -45,12 +47,16 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  _inputField(context) {
+  _inputField(
+    BuildContext context, {
+    required TextEditingController emailController,
+    required TextEditingController passwordController,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextField(
-          // controller: _emailController,
+          controller: emailController,
           decoration: InputDecoration(
             hintText: "Email",
             border: OutlineInputBorder(
@@ -64,7 +70,7 @@ class SignInPage extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         TextField(
-          // controller: _passwordController,
+          controller: passwordController,
           decoration: InputDecoration(
             hintText: "Mật khẩu",
             border: OutlineInputBorder(
@@ -80,12 +86,10 @@ class SignInPage extends StatelessWidget {
         const SizedBox(height: 10),
         ElevatedButton(
           onPressed: () {
-            // context.read<AuthBloc>().add(
-            //   LoginRequested(
-            //     _emailController.text.trim(),
-            //     _passwordController.text.trim(),
-            //   ),
-            // );
+            context.read<AuthBloc>().add(EmailSignInEvent(
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim(),
+                ));
           },
           style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
