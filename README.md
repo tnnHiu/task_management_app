@@ -60,8 +60,9 @@
   - Chạy máy ảo android, hoặc là cắm máy điện thoại hệ điều hành android sau đó chạy lệnh ở terminal "flutter run" chọn máy mình mình muốn chạy
 ## Với người dùng web.
   - chạy lệnh "flutter run" và chọn trình duyệt muốn chạy
-## Thiết lập backend
+## Thiết lập thư viện
   Vào file pubspec.yaml 
+```
 dependencies:
   flutter:
     sdk: flutter
@@ -81,4 +82,5 @@ dependencies:
   url_launcher: ^6.3.1
   hexcolor: ^3.0.1
   google_fonts: ^6.2.1
-và chạy lệnh "flutter pub get"
+```
+và chạy lệnh "flutter pub get" để chạy các thư viện
