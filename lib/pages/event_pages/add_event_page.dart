@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../blocs/events/event_bloc.dart';
 import '../../blocs/events/event_bloc_event.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 //widget
 import '../../pages/widgets/app_widget.dart';
 
@@ -25,10 +25,8 @@ class _AddEventPageState extends State<AddEventPage> {
   bool _showRepeatEndOptions = false;
   String? _selectedRepeatEndOption;
   String? _selectedRepeatOption;
-  
 
-
-  List<String> _reminderOptions = [
+  final List<String> _reminderOptions = [
     'Không có',
     'Sớm 5p',
     'Sớm 30p',
@@ -36,7 +34,6 @@ class _AddEventPageState extends State<AddEventPage> {
     'Sớm 1 ngày',
     'Nhắc nhở liên tục'
   ];
-
 
   Future<void> _selectDateTime(BuildContext context, bool isStart) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -104,41 +101,38 @@ class _AddEventPageState extends State<AddEventPage> {
   }
 
   void _addEvent() {
-  if (_titleController.text.isNotEmpty &&
-      _locationController.text.isNotEmpty &&
-      _descriptionController.text.isNotEmpty &&
-      _startDateTime != null &&
-      _endDateTime != null) {
-    
-    final eventDetails = EventDetails(
-      userId: userId,
-      title: _titleController.text,
-      location: _locationController.text,
-      description: _descriptionController.text,
-      startTime: _startDateTime!,
-      endTime: _endDateTime!,
-      smartReminder: _smartReminder,
-      repeatOption: _selectedRepeatOption,
-      repeatEndDate: _repeatEndDate,
-      repeatEndOption: _selectedRepeatEndOption,
-    );
+    if (_titleController.text.isNotEmpty &&
+        _locationController.text.isNotEmpty &&
+        _descriptionController.text.isNotEmpty &&
+        _startDateTime != null &&
+        _endDateTime != null) {
+      final eventDetails = EventDetails(
+        userId: userId,
+        title: _titleController.text,
+        location: _locationController.text,
+        description: _descriptionController.text,
+        startTime: _startDateTime!,
+        endTime: _endDateTime!,
+        smartReminder: _smartReminder,
+        repeatOption: _selectedRepeatOption,
+        repeatEndDate: _repeatEndDate,
+        repeatEndOption: _selectedRepeatEndOption,
+      );
 
-    BlocProvider.of<EventBloc>(context).add(AddEvent(
-      eventDetails: eventDetails,
-      userId: userId,
-    ));
+      BlocProvider.of<EventBloc>(context).add(AddEvent(
+        eventDetails: eventDetails,
+        userId: userId,
+      ));
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Sự kiện đã được thêm thành công')),
-    );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Vui lòng điền đầy đủ thông tin')),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sự kiện đã được thêm thành công')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Vui lòng điền đầy đủ thông tin')),
+      );
+    }
   }
-}
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -155,9 +149,11 @@ class _AddEventPageState extends State<AddEventPage> {
           children: [
             CustomTextField(controller: _titleController, hintText: 'Tiêu Đề'),
             SizedBox(height: 16.0),
-            CustomTextField(controller: _locationController, hintText: 'Địa điểm'),
+            CustomTextField(
+                controller: _locationController, hintText: 'Địa điểm'),
             SizedBox(height: 16.0),
-            CustomTextField(controller: _descriptionController, hintText: 'Mô tả'),
+            CustomTextField(
+                controller: _descriptionController, hintText: 'Mô tả'),
             SizedBox(height: 16.0),
             CustomDateTimePicker(
               selectedDateTime: _startDateTime,
@@ -167,7 +163,7 @@ class _AddEventPageState extends State<AddEventPage> {
                 });
               },
               label: 'Thời Gian Bắt Đầu',
-            ),        
+            ),
             SizedBox(height: 16.0),
             CustomDateTimePicker(
               selectedDateTime: _endDateTime,
@@ -179,8 +175,7 @@ class _AddEventPageState extends State<AddEventPage> {
               label: 'Thời Gian Kết Thúc',
             ),
             SizedBox(height: 16.0),
-
-            RepeatOptions( 
+            RepeatOptions(
               selectedRepeatOption: _selectedRepeatOption,
               onRepeatOptionChanged: _onRepeatOptionChanged,
               showRepeatEndOptions: _showRepeatEndOptions,
@@ -193,51 +188,51 @@ class _AddEventPageState extends State<AddEventPage> {
                 });
               },
             ),
-
             SizedBox(height: 16.0),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Nhắc Nhở Thông Minh', style: TextStyle(color: Colors.white)),
+                Text('Nhắc Nhở Thông Minh',
+                    style: TextStyle(color: Colors.white)),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: Color.fromARGB(255, 196, 131, 9),
-                  ), child: DropdownButton<String>(
-                      value: _smartReminder,
-                      dropdownColor: Color(0xFF353535),
-                      underline: SizedBox(),
-                      padding: EdgeInsets.symmetric(horizontal: 15),
-                      style: TextStyle(color: Colors.white),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          _smartReminder = newValue!;
-                        });
-                      },
-                      items: _reminderOptions.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),  
-                ), 
+                  ),
+                  child: DropdownButton<String>(
+                    value: _smartReminder,
+                    dropdownColor: Color(0xFF353535),
+                    underline: SizedBox(),
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    style: TextStyle(color: Colors.white),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _smartReminder = newValue!;
+                      });
+                    },
+                    items: _reminderOptions
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 32.0),
             ElevatedButton(
-                onPressed: _addEvent,
-
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 196, 131, 9), 
-                  foregroundColor: Colors.white, 
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              onPressed: _addEvent,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 196, 131, 9),
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text('Lưu Sự Kiện'),
+              ),
+              child: Text('Lưu Sự Kiện'),
             ),
           ],
         ),

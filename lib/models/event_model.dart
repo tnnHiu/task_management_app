@@ -1,9 +1,9 @@
-import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 
 class EventModel extends Equatable {
   final String? userId;
-  final String? id;  
+  final String? id;
   final String title;
   final String location;
   final String description;
@@ -40,7 +40,8 @@ class EventModel extends Equatable {
       'endTime': Timestamp.fromDate(endTime),
       'smartReminder': smartReminder,
       'repeatOption': repeatOption,
-      'repeatEndDate': repeatEndDate != null ? Timestamp.fromDate(repeatEndDate!) : null,
+      'repeatEndDate':
+          repeatEndDate != null ? Timestamp.fromDate(repeatEndDate!) : null,
       'repeatEndOption': repeatEndOption,
     };
   }
@@ -50,12 +51,12 @@ class EventModel extends Equatable {
     return EventModel(
       userId: map['userId'],
       id: id,
-      title: map['title'] ?? '', 
-      location: map['location'] ?? '', 
-      description: map['description'] ?? '', 
+      title: map['title'] ?? '',
+      location: map['location'] ?? '',
+      description: map['description'] ?? '',
       startTime: map['startTime'] != null
           ? (map['startTime'] as Timestamp).toDate()
-          : DateTime.now(), 
+          : DateTime.now(),
       endTime: map['endTime'] != null
           ? (map['endTime'] as Timestamp).toDate()
           : DateTime.now(),
@@ -68,12 +69,17 @@ class EventModel extends Equatable {
     );
   }
 
-  
-
-
   @override
   List<Object?> get props => [
-        id, title, location, description, startTime, endTime, smartReminder,
-        repeatOption, repeatEndDate, repeatEndOption
+        id,
+        title,
+        location,
+        description,
+        startTime,
+        endTime,
+        smartReminder,
+        repeatOption,
+        repeatEndDate,
+        repeatEndOption
       ];
 }
