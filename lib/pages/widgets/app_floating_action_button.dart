@@ -19,7 +19,9 @@ class AppFloatingActionButton extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => AddTaskPage(),
               ),
-            );
+            ).then((_) {
+            BlocProvider.of<TaskBloc>(context).add(FetchTasksEvent());
+          });
           },
           elevation: 0,
           highlightElevation: 0,

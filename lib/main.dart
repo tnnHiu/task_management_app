@@ -5,6 +5,7 @@ import 'package:task_management_app/blocs/auth/auth_bloc.dart';
 import 'package:task_management_app/pages/auth_pages/auth_gate.dart';
 import 'package:task_management_app/services/firebase/firebase_options.dart';
 import 'package:task_management_app/pages/home_page.dart';
+import '../blocs/events/event_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,11 +21,12 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(create: (context) => EventBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'TickApp',
-        home: HomePage(),
+        home: AuthGate(),
       ),
     );
   }
