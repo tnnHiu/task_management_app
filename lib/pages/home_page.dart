@@ -10,6 +10,7 @@ import 'package:task_management_app/pages/widgets/app_widget.dart';
 import 'calendar.dart';
 import '../blocs/events/event_bloc.dart';
 import '../blocs/task/task_bloc.dart';
+import '../pages/search_pages/search_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -47,7 +48,7 @@ class HomePage extends StatelessWidget {
         case 3:
           return FocusPage();
         case 4:
-          return Center(child: Text("More"));
+          return SearchPage();
         default:
           return Center(child: Text("Home Page"));
       }
