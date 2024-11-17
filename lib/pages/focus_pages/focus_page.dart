@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:task_management_app/blocs/focus_mode/focus_mode_bloc.dart';
+
+import '../../main.dart';
 
 class FocusPage extends StatelessWidget {
   const FocusPage({super.key});
@@ -16,6 +19,7 @@ class FocusPage extends StatelessWidget {
               content: Text("Hoàn thành"),
             ),
           );
+          _showNotification();
         }
       },
       child: BlocBuilder<FocusModeBloc, FocusModeState>(
@@ -132,6 +136,29 @@ class FocusPage extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  Future<void> _showNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'focus_mode_channel',
+      'Focus Mode',
+      channelDescription: 'Notification for focus mode completion',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+      sound: RawResourceAndroidNotificationSound('sound_notification'),
+      playSound: true,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Focus Mode',
+      'Hoàn thành',
+      platformChannelSpecifics,
+      payload: 'Focus Mode Completed',
     );
   }
 }

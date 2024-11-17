@@ -35,52 +35,52 @@ class _AddEventPageState extends State<AddEventPage> {
     'Nhắc nhở liên tục'
   ];
 
-  Future<void> _selectDateTime(BuildContext context, bool isStart) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: Colors.orange,
-              onPrimary: Colors.white,
-              surface: Color.fromARGB(255, 68, 65, 65),
-              onSurface: Colors.white,
-            ),
-            dialogBackgroundColor: Colors.grey[900],
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (pickedDate != null) {
-      final TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
-      );
-
-      if (pickedTime != null) {
-        setState(() {
-          final dateTime = DateTime(
-            pickedDate.year,
-            pickedDate.month,
-            pickedDate.day,
-            pickedTime.hour,
-            pickedTime.minute,
-          );
-          if (isStart) {
-            _startDateTime = dateTime;
-          } else {
-            _endDateTime = dateTime;
-          }
-        });
-      }
-    }
-  }
+  // Future<void> _selectDateTime(BuildContext context, bool isStart) async {
+  //   final DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2101),
+  //     builder: (BuildContext context, Widget? child) {
+  //       return Theme(
+  //         data: ThemeData.dark().copyWith(
+  //           colorScheme: const ColorScheme.dark(
+  //             primary: Colors.orange,
+  //             onPrimary: Colors.white,
+  //             surface: Color.fromARGB(255, 68, 65, 65),
+  //             onSurface: Colors.white,
+  //           ),
+  //           dialogBackgroundColor: Colors.grey[900],
+  //         ),
+  //         child: child!,
+  //       );
+  //     },
+  //   );
+  //
+  //   if (pickedDate != null) {
+  //     final TimeOfDay? pickedTime = await showTimePicker(
+  //       context: context,
+  //       initialTime: TimeOfDay.now(),
+  //     );
+  //
+  //     if (pickedTime != null) {
+  //       setState(() {
+  //         final dateTime = DateTime(
+  //           pickedDate.year,
+  //           pickedDate.month,
+  //           pickedDate.day,
+  //           pickedTime.hour,
+  //           pickedTime.minute,
+  //         );
+  //         if (isStart) {
+  //           _startDateTime = dateTime;
+  //         } else {
+  //           _endDateTime = dateTime;
+  //         }
+  //       });
+  //     }
+  //   }
+  // }
 
   void _onRepeatOptionChanged(String? value) {
     setState(() {

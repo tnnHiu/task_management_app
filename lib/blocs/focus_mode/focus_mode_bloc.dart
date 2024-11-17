@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../pages/focus_pages/focus_page.dart';
-
 part 'focus_mode_event.dart';
 part 'focus_mode_state.dart';
+
+// int pomodoroDuration = 25 * 60;
+int pomodoroDuration = 5;
 
 class FocusModeBloc extends Bloc<FocusModeEvent, FocusModeState> {
   Timer? _timer;
@@ -17,7 +18,7 @@ class FocusModeBloc extends Bloc<FocusModeEvent, FocusModeState> {
   int _remainingSeconds;
 
   FocusModeBloc()
-      : _pomodoroDuration = 25 * 60,
+      : _pomodoroDuration = pomodoroDuration,
         //  Sửa thời gian ở đây
         _remainingSeconds = pomodoroDuration,
         super(FocusModeInitialState(_calculateTime(pomodoroDuration), 1)) {
