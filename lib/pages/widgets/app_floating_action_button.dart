@@ -17,11 +17,11 @@ class AppFloatingActionButton extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AddTaskPage(),
+                builder: (context) => AddTaskPage(context),
               ),
             ).then((_) {
-            BlocProvider.of<TaskBloc>(context).add(FetchTasksEvent());
-          });
+              BlocProvider.of<TaskBloc>(context).add(FetchTasksEvent());
+            });
           },
           elevation: 0,
           highlightElevation: 0,

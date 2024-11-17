@@ -24,69 +24,76 @@ class _TaskPageState extends State<TaskPage> {
     return Scaffold(
       backgroundColor: Color(0xFF242424),
       appBar: AppBar(
-          backgroundColor: Color(0xFF353535),
-          // backgroundColor: Colors.white,
-          title: Text(
-              'Nhiệm vụ',
-              style: TextStyle(
-                color: Color.fromARGB(255, 255, 255, 255), 
-              ),
+        backgroundColor: Color(0xFF353535),
+        // backgroundColor: Colors.white,
+        title: Text(
+          'Nhiệm vụ',
+          style: TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.menu, color: Color.fromARGB(255, 255, 255, 255)),
-            onPressed: () {
-              // menu
-            },
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                // Tạm thời để sign out ở đây
-                // context.read<AuthBloc>().add(SignOutEvent());
-              },
-              icon: Icon(Icons.more_vert),
-            ),
-            const SizedBox(width: 12),
-          ],
         ),
-      body: BlocBuilder<TaskBloc, TaskState>(
-        builder: (context, state) {
-          if (state is TaskLoading) {
-            return Center(child: CircularProgressIndicator());
-          } else if (state is TaskLoaded) {
-            final incompleteTasks = state.tasks
-                .where((task) => task.status != 'Đã hoàn thành')
-                .toList();
-            final completedTasks = state.tasks
-                .where((task) => task.status == 'Đã hoàn thành')
-                .toList();
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Chưa hoàn thành",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      )),
-                  _buildTaskList(tasks: incompleteTasks),
-                  Text("Đã hoàn thành",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                      )),
-                  _buildTaskList(tasks: completedTasks),
-                ],
-              ),
-            );
-          } else if (state is TaskError) {
-            return Center(child: Text(state.message));
-          } else {
-            return Center(child: Text('Không có công việc nào.'));
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.menu, color: Color.fromARGB(255, 255, 255, 255)),
+          onPressed: () {
+            // menu
+          },
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Tạm thời để sign out ở đây
+              // context.read<AuthBloc>().add(SignOutEvent());
+            },
+            icon: Icon(Icons.more_vert),
+          ),
+          const SizedBox(width: 12),
+        ],
+      ),
+      body: BlocListener<TaskBloc, TaskState>(
+        listener: (context, state) {
+          if (state is TaskAdded) {
+            context.read<TaskBloc>().add(FetchTasksEvent());
           }
         },
+        child: BlocBuilder<TaskBloc, TaskState>(
+          builder: (context, state) {
+            if (state is TaskLoading) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is TaskLoaded) {
+              final incompleteTasks = state.tasks
+                  .where((task) => task.status != 'Đã hoàn thành')
+                  .toList();
+              final completedTasks = state.tasks
+                  .where((task) => task.status == 'Đã hoàn thành')
+                  .toList();
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Chưa hoàn thành",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        )),
+                    _buildTaskList(tasks: incompleteTasks),
+                    Text("Đã hoàn thành",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        )),
+                    _buildTaskList(tasks: completedTasks),
+                  ],
+                ),
+              );
+            } else if (state is TaskError) {
+              return Center(child: Text(state.message));
+            } else {
+              return Center(child: Text('Không có công việc nào.'));
+            }
+          },
+        ),
       ),
     );
   }

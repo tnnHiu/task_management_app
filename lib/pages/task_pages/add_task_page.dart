@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management_app/pages/widgets/app_widget.dart';
-import '../../pages/event_pages/add_event_page.dart';
+
 import '../../blocs/task/task_bloc.dart';
+import '../event_pages/add_event_page.dart';
 
 class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key});
+  const AddTaskPage(BuildContext context, {super.key});
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
@@ -33,31 +34,35 @@ class _AddTaskPageState extends State<AddTaskPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF242424),
-      
       appBar: AppBar(
         backgroundColor: Color(0xFF353535),
         centerTitle: true,
         title: Text(
-              'Thêm nhiệm vụ',
-              style: TextStyle(
-                color: Color.fromARGB(255, 255, 255, 255),
-              ),    
+          'Thêm nhiệm vụ',
+          style: TextStyle(
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
-          actions: [
-            Tooltip(
-              message: 'Chuyển sang sự kiện',
-              child: IconButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddEventPage()),);
-                },
-                icon: Icon(Icons.arrow_right, color: Color.fromARGB(255, 255, 255, 255)),
-              ),
+        ),
+        actions: [
+          Tooltip(
+            message: 'Chuyển sang sự kiện',
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddEventPage()),
+                );
+              },
+              icon: Icon(Icons.arrow_right,
+                  color: Color.fromARGB(255, 255, 255, 255)),
             ),
-            const SizedBox(width: 12),
-          ],
+          ),
+          const SizedBox(width: 12),
+        ],
       ),
       body: BlocProvider(
         create: (context) => TaskBloc(),
+        // value: BlocProvider.of<TaskBloc>(context),
         child: BlocBuilder<TaskBloc, TaskState>(builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.all(15.0),
@@ -252,5 +257,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
         duration: Duration(seconds: 2),
       ),
     );
+    Navigator.pop(context);
   }
 }

@@ -60,7 +60,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         "userId": _auth.currentUser!.uid,
       });
       emit(TaskAdded());
-      emit(TaskLoaded(await _fetchTasks()));
+      // emit(TaskLoaded(await _fetchTasks()));
+      add(FetchTasksEvent());
     } catch (e) {
       emit(TaskError("Failed to add task: $e"));
     }

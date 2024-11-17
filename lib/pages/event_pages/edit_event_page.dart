@@ -1,36 +1,37 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../blocs/events/event_bloc_event.dart';
-import '../../blocs/events/event_bloc.dart';
-import '../../blocs/events/event_bloc_state.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../blocs/events/event_bloc.dart';
+import '../../blocs/events/event_bloc_event.dart';
+import '../../blocs/events/event_bloc_state.dart';
 //widget
 import '../../pages/widgets/app_widget.dart';
+
 class EditEventPage extends StatefulWidget {
   final event;
-  EditEventPage({required this.event});
+
+  const EditEventPage({super.key, required this.event});
 
   @override
   _EditEventPageState createState() => _EditEventPageState();
 }
 
 class _EditEventPageState extends State<EditEventPage> {
-  final TextEditingController _titleController = TextEditingController(); 
-  final TextEditingController _locationController = TextEditingController(); 
-  final TextEditingController _descriptionController = TextEditingController(); 
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
-
 
   DateTime? _startDateTime;
   DateTime? _endDateTime;
   String? _smartReminder = 'Không có';
-  DateTime? _repeatEndDate; 
+  DateTime? _repeatEndDate;
   bool _showRepeatEndOptions = false;
   String? _selectedRepeatEndOption;
   String? _selectedRepeatOption;
 
-  List<String> _reminderOptions = [
+  final List<String> _reminderOptions = [
     'Không có',
     'Sớm 5p',
     'Sớm 30p',
@@ -42,22 +43,22 @@ class _EditEventPageState extends State<EditEventPage> {
   @override
   void initState() {
     super.initState();
-      _titleController.text = widget.event.title ?? '';
-      _locationController.text = widget.event.location ?? '';
-      _descriptionController.text = widget.event.description ?? '';
-      _startDateTime = widget.event.startTime;
-      _endDateTime = widget.event.endTime;
-      _smartReminder = widget.event.smartReminder ?? 'Không có';
-      _selectedRepeatOption = widget.event.repeatOption ?? 'Không lặp lại';
-      _repeatEndDate = widget.event.repeatEndDate;
+    _titleController.text = widget.event.title ?? '';
+    _locationController.text = widget.event.location ?? '';
+    _descriptionController.text = widget.event.description ?? '';
+    _startDateTime = widget.event.startTime;
+    _endDateTime = widget.event.endTime;
+    _smartReminder = widget.event.smartReminder ?? 'Không có';
+    _selectedRepeatOption = widget.event.repeatOption ?? 'Không lặp lại';
+    _repeatEndDate = widget.event.repeatEndDate;
 
-      if (_selectedRepeatOption != 'Không lặp lại') {
-        _showRepeatEndOptions = true;
-        _selectedRepeatEndOption = widget.event.repeatEndOption ?? 'Ngày';
-      }
-      if (_selectedRepeatEndOption == 'Ngày') {
-        _repeatEndDate = widget.event.repeatEndDate;
-      }
+    if (_selectedRepeatOption != 'Không lặp lại') {
+      _showRepeatEndOptions = true;
+      _selectedRepeatEndOption = widget.event.repeatEndOption ?? 'Ngày';
+    }
+    if (_selectedRepeatEndOption == 'Ngày') {
+      _repeatEndDate = widget.event.repeatEndDate;
+    }
   }
 
   Future<void> _selectDateTime(BuildContext context, bool isStart) async {
@@ -110,7 +111,7 @@ class _EditEventPageState extends State<EditEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF242424), 
+      backgroundColor: Color(0xFF242424),
       appBar: AppBar(
         backgroundColor: Color(0xFF242424),
         title: Row(
@@ -119,24 +120,23 @@ class _EditEventPageState extends State<EditEventPage> {
             Expanded(
               child: Text(
                 'Chỉnh Sửa Sự Kiện',
-                textAlign: TextAlign.center, 
+                textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            
             IconButton(
               icon: Icon(Icons.close, color: Colors.red),
               onPressed: () {
                 final eventBloc = BlocProvider.of<EventBloc>(context);
                 eventBloc.add(DeleteEvent(
                   eventId: widget.event.id,
-                  userId: userId,  
+                  userId: userId,
                 ));
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Sự kiện đã được xóa!')),
                 );
-                Navigator.of(context).pop(); 
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -148,9 +148,11 @@ class _EditEventPageState extends State<EditEventPage> {
           children: [
             CustomTextField(controller: _titleController, hintText: 'Tiêu Đề'),
             SizedBox(height: 16.0),
-            CustomTextField(controller: _locationController, hintText: 'Địa điểm'),
+            CustomTextField(
+                controller: _locationController, hintText: 'Địa điểm'),
             SizedBox(height: 16.0),
-            CustomTextField(controller: _descriptionController, hintText: 'Mô tả'),
+            CustomTextField(
+                controller: _descriptionController, hintText: 'Mô tả'),
             SizedBox(height: 16.0),
             CustomDateTimePicker(
               selectedDateTime: _startDateTime,
@@ -189,7 +191,8 @@ class _EditEventPageState extends State<EditEventPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Nhắc Nhở Thông Minh', style: TextStyle(color: Colors.white)),
+                Text('Nhắc Nhở Thông Minh',
+                    style: TextStyle(color: Colors.white)),
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
@@ -206,7 +209,8 @@ class _EditEventPageState extends State<EditEventPage> {
                         _smartReminder = newValue!;
                       });
                     },
-                    items: _reminderOptions.map<DropdownMenuItem<String>>((String value) {
+                    items: _reminderOptions
+                        .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
@@ -244,18 +248,22 @@ class _EditEventPageState extends State<EditEventPage> {
                 final state = eventBloc.state;
 
                 if (state is EventUpdatedSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Cập nhật sự kiện thành công!')));
-                  Navigator.of(context).pop();  
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Cập nhật sự kiện thành công!')));
+                  Navigator.of(context).pop();
                 } else if (state is EventUpdatedFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage)));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.errorMessage)));
                 }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 196, 131, 9),
                 padding: EdgeInsets.symmetric(horizontal: 50, vertical: 16),
-                
               ),
-              child: Text('Lưu', style: TextStyle(fontSize: 16, color: Colors.white), ),
+              child: Text(
+                'Lưu',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
             ),
           ],
         ),
@@ -267,7 +275,7 @@ class _EditEventPageState extends State<EditEventPage> {
     setState(() {
       _selectedRepeatOption = newOption;
       _showRepeatEndOptions = newOption != 'Không lặp lại';
-      _repeatEndDate = null; 
+      _repeatEndDate = null;
     });
   }
 
