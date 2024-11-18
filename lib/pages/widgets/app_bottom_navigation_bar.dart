@@ -30,18 +30,21 @@ class AppBottomNavigationBar extends StatelessWidget {
               ),
               label: "",
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.center_focus_strong,
+
+            if (!kIsWeb)
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.center_focus_strong,
+                ),
+                label: "",
               ),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.more_horiz_sharp,
-              ),
-              label: "",
-            ),
+
+            // BottomNavigationBarItem(
+            //   icon: Icon(
+            //     Icons.more_horiz_sharp,
+            //   ),
+            //   label: "",
+            // ),
           ],
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.white38,

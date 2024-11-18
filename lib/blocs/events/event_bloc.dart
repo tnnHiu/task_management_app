@@ -1,5 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -40,18 +42,23 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
       await _firestore.collection('events').add(eventModel.toMap());
 
       // Nếu có tùy chọn nhắc nhở thì thêm thông báo nhắc nhở
-      if (eventDetails.smartReminder != null &&
-          eventDetails.smartReminder!.isNotEmpty) {
-        debugPrint('Event start time: ${eventDetails.startTime}');
-        DateTime reminderTime = _calculateReminderTime(
-            eventDetails.startTime, eventDetails.smartReminder);
-        await _scheduleNotification(
-          id: DateTime.now().millisecondsSinceEpoch ~/ 1000, //
-          title: eventDetails.title,
-          body:
-              'Sự kiện: ${eventDetails.title} sẽ bắt đầu vào lúc ${eventDetails.startTime}',
-          scheduledTime: reminderTime,
-        );
+
+      if (!kIsWeb &&
+          (Platform.isAndroid || Platform.isIOS) &&
+          flutterLocalNotificationsPlugin != null) {
+        if (eventDetails.smartReminder != null &&
+            eventDetails.smartReminder!.isNotEmpty) {
+          debugPrint('Event start time: ${eventDetails.startTime}');
+          DateTime reminderTime = _calculateReminderTime(
+              eventDetails.startTime, eventDetails.smartReminder);
+          await _scheduleNotification(
+            id: DateTime.now().millisecondsSinceEpoch ~/ 1000, //
+            title: eventDetails.title,
+            body:
+                'Sự kiện: ${eventDetails.title} sẽ bắt đầu vào lúc ${eventDetails.startTime}',
+            scheduledTime: reminderTime,
+          );
+        }
       }
 
       emit(EventAddedSuccess());
@@ -129,24 +136,27 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
             .doc(event.eventId)
             .update(eventModel.toMap());
 
-        final int notificationId = event.eventId.hashCode;
+        if (!kIsWeb &&
+            (Platform.isAndroid || Platform.isIOS) &&
+            flutterLocalNotificationsPlugin != null) {
+          final int notificationId = event.eventId.hashCode;
+          if (oldEvent.smartReminder != eventDetails.smartReminder ||
+              oldEvent.startTime != eventDetails.startTime) {
+            await flutterLocalNotificationsPlugin?.cancel(notificationId);
 
-        if (oldEvent.smartReminder != eventDetails.smartReminder ||
-            oldEvent.startTime != eventDetails.startTime) {
-          await flutterLocalNotificationsPlugin.cancel(notificationId);
+            if (eventDetails.smartReminder != null &&
+                eventDetails.smartReminder!.isNotEmpty) {
+              final DateTime newReminderTime = _calculateReminderTime(
+                  eventDetails.startTime, eventDetails.smartReminder);
 
-          if (eventDetails.smartReminder != null &&
-              eventDetails.smartReminder!.isNotEmpty) {
-            final DateTime newReminderTime = _calculateReminderTime(
-                eventDetails.startTime, eventDetails.smartReminder);
-
-            await _scheduleNotification(
-              id: notificationId,
-              title: eventDetails.title,
-              body:
-                  'Sự kiện: ${eventDetails.title} sẽ bắt đầu vào lúc ${eventDetails.startTime}',
-              scheduledTime: newReminderTime,
-            );
+              await _scheduleNotification(
+                id: notificationId,
+                title: eventDetails.title,
+                body:
+                    'Sự kiện: ${eventDetails.title} sẽ bắt đầu vào lúc ${eventDetails.startTime}',
+                scheduledTime: newReminderTime,
+              );
+            }
           }
         }
 
@@ -210,7 +220,7 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
         NotificationDetails(android: androidDetails);
 
     try {
-      await flutterLocalNotificationsPlugin.zonedSchedule(
+      await flutterLocalNotificationsPlugin?.zonedSchedule(
         id,
         title,
         body,

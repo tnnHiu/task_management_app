@@ -1,15 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
+
 import '/blocs/events/event_bloc.dart';
 import '/blocs/events/event_bloc_event.dart';
-import '/blocs/events/event_bloc_state.dart'; 
-import 'package:intl/intl.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-
-import '../../pages/event_pages/edit_event_page.dart';
-
+import '/blocs/events/event_bloc_state.dart';
+import '../../../pages/event_pages/edit_event_page.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -20,8 +18,6 @@ class _CalendarPageState extends State<CalendarPage> {
   late DateTime _selectedDay;
   late DateTime _focusedDay;
   final userId = FirebaseAuth.instance.currentUser?.uid;
-
-
 
   @override
   void initState() {
@@ -72,16 +68,18 @@ class _CalendarPageState extends State<CalendarPage> {
                 // _logDateToFirebase(formattedSelectedDay);
                 final userId = FirebaseAuth.instance.currentUser?.uid;
 
-                  if (userId != null) {
-                    context.read<EventBloc>().add(FetchEventsForDay(selectedDay: selectedDay, userId: userId));
-                  } else {
-                    print("User is not logged in.");
-                  }
-
+                if (userId != null) {
+                  context.read<EventBloc>().add(FetchEventsForDay(
+                      selectedDay: selectedDay, userId: userId));
+                } else {
+                  print("User is not logged in.");
+                }
               },
               calendarStyle: CalendarStyle(
-                todayDecoration: BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
-                selectedDecoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                todayDecoration:
+                    BoxDecoration(color: Colors.blue, shape: BoxShape.circle),
+                selectedDecoration:
+                    BoxDecoration(color: Colors.red, shape: BoxShape.circle),
                 defaultTextStyle: TextStyle(color: Colors.white),
                 weekendTextStyle: TextStyle(color: Colors.red),
                 outsideTextStyle: TextStyle(color: Colors.grey),
@@ -89,13 +87,16 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
           Expanded(
-            child: BlocBuilder<EventBloc, EventBlocState>(builder: (context, state) {
+            child: BlocBuilder<EventBloc, EventBlocState>(
+                builder: (context, state) {
               if (state is EventLoading) {
                 return Center(child: CircularProgressIndicator());
               } else if (state is EventLoaded) {
                 final eventsForDay = state.events.where((event) {
-                  final selectedDateOnly = DateTime(_selectedDay.year, _selectedDay.month, _selectedDay.day);
-                  final eventDateOnly = DateTime(event.startTime.year, event.startTime.month, event.startTime.day);
+                  final selectedDateOnly = DateTime(
+                      _selectedDay.year, _selectedDay.month, _selectedDay.day);
+                  final eventDateOnly = DateTime(event.startTime.year,
+                      event.startTime.month, event.startTime.day);
                   return selectedDateOnly == eventDateOnly;
                 }).toList();
 
@@ -107,9 +108,13 @@ class _CalendarPageState extends State<CalendarPage> {
                   },
                 );
               } else if (state is EventLoadFailure) {
-                return Center(child: Text('Lỗi khi tải sự kiện: ${state.errorMessage}', style: TextStyle(color: Colors.white)));
+                return Center(
+                    child: Text('Lỗi khi tải sự kiện: ${state.errorMessage}',
+                        style: TextStyle(color: Colors.white)));
               } else {
-                return Center(child: Text('Chọn một ngày để xem sự kiện', style: TextStyle(color: Colors.white)));
+                return Center(
+                    child: Text('Chọn một ngày để xem sự kiện',
+                        style: TextStyle(color: Colors.white)));
               }
             }),
           ),
@@ -132,11 +137,11 @@ class EventTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(event.title, style: TextStyle(color: Colors.white)),
-          Text(DateFormat('HH:mm').format(event.startTime), style: TextStyle(color: Colors.orange)),
+          Text(DateFormat('HH:mm').format(event.startTime),
+              style: TextStyle(color: Colors.orange)),
         ],
       ),
       onTap: () {
-
         showModalBottomSheet(
           context: context,
           backgroundColor: Colors.transparent,
@@ -150,7 +155,6 @@ class EventTile extends StatelessWidget {
   }
 }
 
-
 class EventDetailDialog extends StatelessWidget {
   final event;
 
@@ -162,7 +166,8 @@ class EventDetailDialog extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.4,
       decoration: BoxDecoration(
         color: Colors.black,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
       ),
       padding: EdgeInsets.all(20),
       child: Column(
@@ -171,23 +176,33 @@ class EventDetailDialog extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(event.title, style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.bold)),
+              Text(event.title,
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold)),
               IconButton(
                 icon: Icon(Icons.edit, color: Colors.white),
                 onPressed: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => EditEventPage(event: event, )),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditEventPage(
+                              event: event,
+                            )),
                   );
-                  print("ID sự kiện: ${event.id}"); 
-
+                  print("ID sự kiện: ${event.id}");
                 },
               ),
             ],
           ),
           SizedBox(height: 8),
-          Text('${DateFormat('dd/MM/yyyy').format(event.startTime)} - ${DateFormat('HH:mm').format(event.startTime)} - ${DateFormat('HH:mm').format(event.endTime)}', style: TextStyle(fontSize: 14, color: Colors.grey)),
+          Text(
+              '${DateFormat('dd/MM/yyyy').format(event.startTime)} - ${DateFormat('HH:mm').format(event.startTime)} - ${DateFormat('HH:mm').format(event.endTime)}',
+              style: TextStyle(fontSize: 14, color: Colors.grey)),
           SizedBox(height: 20),
-          OptionRow(label: 'Lời nhắc', value: event.smartReminder ?? 'Không có'),
+          OptionRow(
+              label: 'Lời nhắc', value: event.smartReminder ?? 'Không có'),
           OptionRow(label: 'Lặp lại', value: event.repeatOption ?? 'Không có'),
         ],
       ),

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -11,42 +14,46 @@ import 'package:timezone/data/latest.dart' as tz;
 
 import '../blocs/events/event_bloc.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin =
+    !kIsWeb && (Platform.isAndroid || Platform.isIOS)
+        ? FlutterLocalNotificationsPlugin()
+        : null;
 
 Future<void> main() async {
-  tz.initializeTimeZones();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await _requestNotificationPermission();
-  // Kiểm tra và yêu cầu quyền Exact Alarm cho Android 13+
-  final androidPlugin =
-      flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
-  if (androidPlugin != null) {
-    bool? exactAlarmGranted =
-        await androidPlugin.requestExactAlarmsPermission();
-    if (exactAlarmGranted == null || !exactAlarmGranted) {
-      debugPrint("Exact alarm permission was not granted.");
+  if (!kIsWeb &&
+      (Platform.isAndroid || Platform.isIOS) &&
+      flutterLocalNotificationsPlugin != null) {
+    tz.initializeTimeZones();
+    await _requestNotificationPermission();
+    // Kiểm tra và yêu cầu quyền Exact Alarm cho Android 13 trở lên
+    final androidPlugin =
+        flutterLocalNotificationsPlugin?.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    if (androidPlugin != null) {
+      bool? exactAlarmGranted =
+          await androidPlugin.requestExactAlarmsPermission();
+      if (exactAlarmGranted == null || !exactAlarmGranted) {
+        debugPrint("Exact alarm permission was not granted.");
+      }
     }
+    // Cấu hình thông báo
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin?.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        debugPrint('Notification payload: ${response.payload}');
+      },
+    );
   }
-
-  // Cấu hình thông báo
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  const InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-    onDidReceiveNotificationResponse: (NotificationResponse response) async {
-      debugPrint('Notification payload: ${response.payload}');
-    },
-  );
 
   runApp(MyApp());
 }

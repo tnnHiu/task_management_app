@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management_app/blocs/home_page_navigation/home_page_navigation_bloc.dart';
@@ -7,7 +8,7 @@ import 'package:task_management_app/pages/widgets/app_widget.dart';
 import '../blocs/events/event_bloc.dart';
 import '../blocs/task/task_bloc.dart';
 import '../pages/search_pages/search_page.dart';
-import 'calendar.dart';
+import 'calendar_pages/calendar.dart';
 import 'focus_pages/focus_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -19,9 +20,7 @@ class HomePage extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => HomePageNavigationBloc()),
         BlocProvider(create: (context) => TaskBloc()),
-        // BlocProvider(create: (context) => CalendarBloc()),
         BlocProvider(create: (context) => EventBloc()),
-        // BlocProvider(create: (context) => )
       ],
       child: Scaffold(
         body: _buildSelectedPage(),
@@ -41,14 +40,18 @@ class HomePage extends StatelessWidget {
           return TaskPage();
         case 1:
           return CalendarPage();
+        // case 2:
+        //   return Center(child: Text("Tasks Page"));
         case 2:
-          return Center(child: Text("Tasks Page"));
-        case 3:
-          return FocusPage();
-        case 4:
           return SearchPage();
+        case 3:
+          if (kIsWeb) {
+            return Container();
+          }
+          return FocusPage();
         default:
-          return Center(child: Text("Home Page"));
+          // return Center(child: Text("Home Page"));
+          return TaskPage();
       }
     });
   }

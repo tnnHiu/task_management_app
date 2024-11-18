@@ -153,7 +153,7 @@ class FocusPage extends StatelessWidget {
     );
     const NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
+    await flutterLocalNotificationsPlugin?.show(
       0,
       'Focus Mode',
       'Hoàn thành',
