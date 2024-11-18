@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management_app/blocs/task/task_bloc.dart';
 import 'package:task_management_app/models/task_model.dart';
+import '../widgets/Sidebar.dart';
 
 import '../widgets/app_widget.dart';
 
@@ -33,11 +34,14 @@ class _TaskPageState extends State<TaskPage> {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: Color.fromARGB(255, 255, 255, 255)),
-          onPressed: () {
-            // menu
-          },
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.menu),
+            color: Colors.white,
+            onPressed: () {
+              Scaffold.of(context).openDrawer(); // Sử dụng context của Builder
+            },
+          ),
         ),
         actions: [
           IconButton(
@@ -50,6 +54,7 @@ class _TaskPageState extends State<TaskPage> {
           const SizedBox(width: 12),
         ],
       ),
+      drawer: Sidebar(),
       body: BlocListener<TaskBloc, TaskState>(
         listener: (context, state) {
           if (state is TaskAdded) {
