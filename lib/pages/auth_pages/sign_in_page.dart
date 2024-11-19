@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management_app/blocs/auth/auth_bloc.dart';
+import 'package:task_management_app/pages/widgets/app_widget.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key, required this.onPressed});
@@ -26,7 +27,9 @@ class SignInPage extends StatelessWidget {
                     passwordController: passwordController),
                 _forgotPassword(context),
                 _signup(context),
-                _googleSignInButton(context),
+                AppGoogleSignInButton(onPressed: () {
+                  context.read<AuthBloc>().add(GoogleSignInEvent());
+                }),
               ],
             ),
           );
@@ -128,41 +131,6 @@ class SignInPage extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _googleSignInButton(BuildContext context) {
-    return Container(
-      height: 45,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        border: Border.all(
-          color: Colors.purple,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.white.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 1,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: TextButton(
-        onPressed: () {
-          context.read<AuthBloc>().add(GoogleSignInEvent());
-        },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Icon(Icons.add_box_sharp, color: Colors.red),
-            Text(
-              "Đăng nhập với Google",
-              style: TextStyle(color: Colors.black),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
