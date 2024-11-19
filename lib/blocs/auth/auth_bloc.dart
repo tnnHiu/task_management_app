@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -9,6 +10,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+
 
   AuthBloc() : super(AuthInitial()) {
     on<EmailSignInEvent>(_onEmailLogin);
@@ -66,10 +68,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
         return;
       }
-      await _auth.createUserWithEmailAndPassword(
+
+      
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: event.email,
         password: event.password,
       );
+
+      await userCredential.user?.updateDisplayName();
+
+      final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    
+      await _firestore.collection('user').doc(userCredential.user?.uid).set({
+        'userId': userCredential.user?.uid,
+        'username': event.username,
+        'email': event.email,
+      });
+
       emit(AuthSuccess());
     } on FirebaseAuthException catch (e) {
       emit(

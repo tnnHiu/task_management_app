@@ -17,8 +17,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _userNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +154,7 @@ class _SignUpPageState extends State<SignUpPage> {
     final String email = _emailController.text.trim();
     final String password = _passwordController.text.trim();
     final String confirmPassword = _confirmPasswordController.text.trim();
+    final String username = _userNameController.text.trim();
 
     // Gửi sự kiện đăng ký
     BlocProvider.of<AuthBloc>(context).add(
@@ -162,6 +162,7 @@ class _SignUpPageState extends State<SignUpPage> {
         email: email,
         password: password,
         confirmPassword: confirmPassword,
+        username: username,
       ),
     );
   }

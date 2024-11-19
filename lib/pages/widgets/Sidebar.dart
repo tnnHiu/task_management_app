@@ -6,6 +6,7 @@ class Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
+    print("user name ${user?.displayName}");
     String displayName = user?.displayName ?? 'Người dùng';
 
 

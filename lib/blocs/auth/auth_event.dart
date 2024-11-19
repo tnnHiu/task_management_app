@@ -24,15 +24,17 @@ class EmailSignUpEvent extends AuthEvent {
   final String email;
   final String password;
   final String confirmPassword;
+  final String username;
 
   EmailSignUpEvent({
     required this.email,
     required this.password,
     required this.confirmPassword,
+    required this.username,
   });
 
   @override
-  List<Object> get props => [email, password, confirmPassword];
+  List<Object> get props => [email, password, confirmPassword, username];
 }
 
 class GoogleSignInEvent extends AuthEvent {}
