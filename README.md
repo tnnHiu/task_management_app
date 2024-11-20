@@ -48,7 +48,7 @@
 - Tích hợp với ứng dụng quản lý tài liệu: Như Google Drive, Dropbox để đính kèm tài liệu liên quan đến nhiệm vụ/sự kiện
 
 # Công nghệ
-- React Native
+- Flutter
 - Firebase (noSQL)
 
 # Công nghệ sử dụng
