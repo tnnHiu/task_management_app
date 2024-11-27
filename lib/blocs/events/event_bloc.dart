@@ -67,12 +67,6 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
     }
   }
 
-  /// Handles the [FetchEventsForDay] event to fetch events from Firestore
-  /// that belongs to the given user and starts within the given day.
-  ///
-  /// Emits [EventLoading] when the event is being processed, and
-  /// [EventLoaded] if the events are loaded successfully, or
-  /// [EventLoadFailure] if there is an error.
   Future<void> _onFetchEventsForDay(
       FetchEventsForDay event, Emitter<EventBlocState> emit) async {
     emit(EventLoading());
@@ -90,6 +84,7 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
           .where('userId', isEqualTo: event.userId)
           .where('startTime', isGreaterThanOrEqualTo: startOfDay)
           .where('startTime', isLessThan: endOfDay)
+          .where('status', isEqualTo: 'active') //
           .get();
 
       // Convert the query snapshot to a list of EventModel objects
@@ -107,22 +102,30 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
     }
   }
 
+  // Future<void> _onDeleteEvent(
+  //     DeleteEvent event, Emitter<EventBlocState> emit) async {
+  //   emit(EventDeleting());
+  //   try {
+  //     await _firestore.collection('events').doc(event.eventId).delete();
+  //     emit(EventDeletedSuccess());
+  //   } catch (e) {
+  //     emit(EventDeletedFailure('Lỗi khi xóa sự kiện: $e'));
+  //   }
+  // }
   Future<void> _onDeleteEvent(
-      DeleteEvent event, Emitter<EventBlocState> emit) async {
-    emit(EventDeleting());
-    try {
-      await _firestore.collection('events').doc(event.eventId).delete();
-      emit(EventDeletedSuccess());
-    } catch (e) {
-      emit(EventDeletedFailure('Lỗi khi xóa sự kiện: $e'));
-    }
-  }
+    DeleteEvent event, Emitter<EventBlocState> emit) async {
+  emit(EventDeleting());
+  try {
+    await _firestore.collection('events').doc(event.eventId).update({
+      'status': 'canceled',
+    });
 
-  /// Handles the [UpdateEvent] event to update an existing event in the Firestore database
-  ///
-  /// Emits [EventUpdating] when the event is being processed, and
-  /// [EventUpdatedSuccess] if the event is updated successfully, or
-  /// [EventUpdatedFailure] if there is an error.
+    emit(EventDeletedSuccess());
+  } catch (e) {
+    emit(EventDeletedFailure('Lỗi khi hủy sự kiện: $e'));
+  }
+}
+
   Future<void> _onUpdateEvent(
       UpdateEvent event, Emitter<EventBlocState> emit) async {
     emit(EventUpdating());

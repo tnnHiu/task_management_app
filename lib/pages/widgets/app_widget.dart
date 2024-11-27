@@ -20,6 +20,7 @@ part 'app_floating_action_button.dart';
 part 'app_google_sign_in_button.dart';
 part 'PriorityPieChart.dart';
 part 'BarChart.dart';
+part 'HorizontalBarChart.dart';
 // part 'app_model_bottom_sheet.dart';
 part 'app_task_item.dart';
 part 'app_text_field.dart';

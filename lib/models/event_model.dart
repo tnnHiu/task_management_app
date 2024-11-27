@@ -13,6 +13,7 @@ class EventModel extends Equatable {
   final String? repeatOption;
   final DateTime? repeatEndDate;
   final String? repeatEndOption;
+  final String status;
 
   // Khởi tạo sự kiện
   EventModel({
@@ -27,6 +28,7 @@ class EventModel extends Equatable {
     this.repeatOption,
     this.repeatEndDate,
     this.repeatEndOption,
+    this.status = 'active',
   });
 
   // Chuyển model sang Map để lưu trữ trong Firebase
@@ -43,6 +45,7 @@ class EventModel extends Equatable {
       'repeatEndDate':
           repeatEndDate != null ? Timestamp.fromDate(repeatEndDate!) : null,
       'repeatEndOption': repeatEndOption,
+      'status': status,
     };
   }
 
@@ -66,6 +69,7 @@ class EventModel extends Equatable {
           ? (map['repeatEndDate'] as Timestamp).toDate()
           : null,
       repeatEndOption: map['repeatEndOption'],
+      status: map['status'] ?? 'active',
     );
   }
 

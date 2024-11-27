@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../auth_pages/auth_gate.dart';
 import '../Profile_pages/task_pa.dart';
+import '../../pages/Profile_pages/event_pa.dart';
 
 class Sidebar extends StatelessWidget {
   @override
@@ -60,28 +61,19 @@ class Sidebar extends StatelessWidget {
             leading: Icon(Icons.mail, color: Colors.orange),
             title: Text('Thống kê sự kiện', style: TextStyle(color: Colors.white)),
             onTap: () {
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EventStatisticsScreen()),
+            );
             },
           ),
           ListTile(
             leading: Icon(Icons.rss_feed, color: Colors.orange,),
-            title: Text('Đã đăng ký Lịch', style: TextStyle(color: Colors.white),),
-            trailing: Text('277'),
-            onTap: () {
-            },
-          ),
-          ListTile(
-            title: Text('Study', style: TextStyle(color: Colors.white)),
-            trailing: Text('4', style: TextStyle(color: Colors.white)),
+            title: Text('Thống kê focus mode', style: TextStyle(color: Colors.white),),
             onTap: () {
             },
           ),
           Divider(),
-          ListTile(
-            leading: Icon(Icons.add, color: Colors.grey),
-            title: Text('Thêm', style: TextStyle(color: Colors.white)),
-            onTap: () {
-            },
-          ),
           Spacer(), 
           ListTile(
             leading: Icon(Icons.logout, color: Colors.red),

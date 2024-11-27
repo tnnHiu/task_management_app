@@ -70,13 +70,6 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         "Thấp": completedTasks.where((task) => task.priority == "Thấp" && task.status == "Đã hoàn thành").length,
         "Không ưu tiên": completedTasks.where((task) => task.priority == "Không ưu tiên" && task.status == "Đã hoàn thành").length,
       };
-      // final caoRateCompleted = completedTasks.where((task) => task.priority == "Cao" && task.status == "Đã hoàn thành").length;
-      // final caoRate = tasks.where((task) => task.priority == "Cao").length;
-      // final vuaRateCompleted = completedTasks.where((task) => task.priority == "Vừa" && task.status == "Đã hoàn thành").length;
-      // final vuaRate = tasks.where((task) => task.priority == "Vừa").length;
-      // final thapRateCompleted = completedTasks.where((task) => task.priority == "Thấp" && task.status == "Đã hoàn thành").length;
-      // final thapRate = tasks.where((task) => task.priority == "Thấp").length;
-      // print((caoRateCompleted / caoRate) * 100);
 
       int getCompletedCountByPriority(List tasks, List completedTasks, String priority) {
         final completedCount = completedTasks.where((task) => task.priority == priority && task.status == "Đã hoàn thành").length;
@@ -89,12 +82,6 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
         "Vừa": getCompletedCountByPriority(tasks, completedTasks, "Vừa"),
         "Thấp": getCompletedCountByPriority(tasks, completedTasks, "Thấp"),
       };
-
-
-      // final caoRate = getCompletedCountByPriority(tasks, completedTasks, "Cao");
-      // final vuaRate = getCompletedCountByPriority(tasks, completedTasks, "Vừa");
-      // final thapRate = getCompletedCountByPriority(tasks, completedTasks, "Thấp");
-      // print (caoRate);
 
 
 

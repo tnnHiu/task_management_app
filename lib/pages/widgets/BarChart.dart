@@ -32,7 +32,7 @@ class PriorityBarChart extends StatelessWidget {
                   barGroups: _buildBarGroups(),
                   titlesData: FlTitlesData(
                     leftTitles: AxisTitles(
-                      axisNameWidget: const Text(''), // Cái này nếu bạn muốn hiển thị tên trục Y
+                      axisNameWidget: const Text(''), 
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (value, meta) {
@@ -47,7 +47,7 @@ class PriorityBarChart extends StatelessWidget {
                       ),
                     ),
                     bottomTitles: AxisTitles(
-                      axisNameWidget: const Text(''), // Tên trục X (nếu muốn)
+                      axisNameWidget: const Text(''), 
                       sideTitles: SideTitles(
                         showTitles: true,
                         getTitlesWidget: (value, meta) {
@@ -90,7 +90,7 @@ class PriorityBarChart extends StatelessWidget {
           fromY: 0,  // Điểm bắt đầu của thanh cột (từ 0)
           toY: rate, // Giá trị y cho thanh cột (tỷ lệ hoàn thành)
           width: 16,
-          color: Colors.blue,
+          color: Colors.red,
           borderRadius: BorderRadius.circular(4),
         ),
       ],

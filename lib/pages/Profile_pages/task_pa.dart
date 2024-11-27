@@ -25,7 +25,9 @@ class StatisticsPage extends StatelessWidget {
           foregroundColor: Colors.white,
           backgroundColor: Color(0xFF242424),
         ),
-        body: BlocBuilder<StatisticsBloc, StatisticsState>(
+        body: Container(
+          color: const Color(0xFF353535),
+          child: BlocBuilder<StatisticsBloc, StatisticsState>(
           builder: (context, state) {
             if (state is StatisticsLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -36,7 +38,6 @@ class StatisticsPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Các widget hiển thị dữ liệu thống kê
                       _buildStatisticCard(
                         title: "Tổng số công việc",
                         value: state.totalTasksCount.toString(),
@@ -78,6 +79,8 @@ class StatisticsPage extends StatelessWidget {
             return const Center(child: Text("Không có dữ liệu"));
           },
         ),
+        ),
+        
       ),
     );
   }
