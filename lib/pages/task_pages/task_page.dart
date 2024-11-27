@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management_app/blocs/task/task_bloc.dart';
 import 'package:task_management_app/models/task_model.dart';
 import '../widgets/Sidebar.dart';
-
 import '../widgets/app_widget.dart';
 
 class TaskPage extends StatefulWidget {
@@ -26,7 +25,6 @@ class _TaskPageState extends State<TaskPage> {
       backgroundColor: Color(0xFF242424),
       appBar: AppBar(
         backgroundColor: Color(0xFF353535),
-        // backgroundColor: Colors.white,
         title: Text(
           'Nhiệm vụ',
           style: TextStyle(
@@ -39,16 +37,13 @@ class _TaskPageState extends State<TaskPage> {
             icon: Icon(Icons.menu),
             color: Colors.white,
             onPressed: () {
-              Scaffold.of(context).openDrawer(); // Sử dụng context của Builder
+              Scaffold.of(context).openDrawer();
             },
           ),
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              // Tạm thời để sign out ở đây
-              // context.read<AuthBloc>().add(SignOutEvent());
-            },
+            onPressed: () {},
             icon: Icon(Icons.more_vert),
           ),
           const SizedBox(width: 12),
@@ -104,11 +99,23 @@ class _TaskPageState extends State<TaskPage> {
   }
 
   Widget _buildTaskList({required List<TaskModel> tasks}) {
+    // Sắp xếp lại task theo mức độ ưu tiên
+    tasks.sort((a, b) {
+      const priorityOrder = {
+        'Cao': 1,
+        'Vừa': 2,
+        'Thấp': 3,
+        'Không ưu tiên': 4
+      };
+      return priorityOrder[a.priority]!.compareTo(priorityOrder[b.priority]!);
+    });
+
     return Expanded(
       child: ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           final task = tasks[index];
+          bool isOverdue = task.deadline.toDate().isBefore(DateTime.now());
           return TaskItem(
             taskId: task.id,
             text: task.name,
@@ -123,6 +130,7 @@ class _TaskPageState extends State<TaskPage> {
                     : task.priority == 'Thấp'
                         ? Colors.blue
                         : Colors.white,
+            // Áp dụng màu sắc chữ nếu task quá hạn
           );
         },
       ),

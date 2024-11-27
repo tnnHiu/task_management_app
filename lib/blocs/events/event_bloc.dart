@@ -67,15 +67,24 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
     }
   }
 
+  /// Handles the [FetchEventsForDay] event to fetch events from Firestore
+  /// that belongs to the given user and starts within the given day.
+  ///
+  /// Emits [EventLoading] when the event is being processed, and
+  /// [EventLoaded] if the events are loaded successfully, or
+  /// [EventLoadFailure] if there is an error.
   Future<void> _onFetchEventsForDay(
       FetchEventsForDay event, Emitter<EventBlocState> emit) async {
     emit(EventLoading());
 
     try {
+      // Get the start and end of the day in milliseconds since the Unix epoch
       DateTime startOfDay = DateTime(event.selectedDay.year,
           event.selectedDay.month, event.selectedDay.day);
       DateTime endOfDay = startOfDay.add(Duration(days: 1));
 
+      // Query Firestore for events that belongs to the given user and starts
+      // within the given day
       QuerySnapshot querySnapshot = await _firestore
           .collection('events')
           .where('userId', isEqualTo: event.userId)
@@ -83,13 +92,16 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
           .where('startTime', isLessThan: endOfDay)
           .get();
 
+      // Convert the query snapshot to a list of EventModel objects
       List<EventModel> events = querySnapshot.docs.map((doc) {
         var data = doc.data() as Map<String, dynamic>;
         return EventModel.fromMap(data, id: doc.id);
       }).toList();
 
+      // Emit the loaded events
       emit(EventLoaded(events: events));
     } catch (e) {
+      // Emit the error if there is one
       emit(EventLoadFailure('Lỗi khi tải sự kiện: $e'));
       print('Error fetching events: $e');
     }
@@ -106,18 +118,30 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
     }
   }
 
+  /// Handles the [UpdateEvent] event to update an existing event in the Firestore database
+  ///
+  /// Emits [EventUpdating] when the event is being processed, and
+  /// [EventUpdatedSuccess] if the event is updated successfully, or
+  /// [EventUpdatedFailure] if there is an error.
   Future<void> _onUpdateEvent(
       UpdateEvent event, Emitter<EventBlocState> emit) async {
     emit(EventUpdating());
+
     try {
+      // Get the existing event from Firestore
       final docSnapshot =
           await _firestore.collection('events').doc(event.eventId).get();
+
       if (docSnapshot.exists && docSnapshot['userId'] == event.userId) {
+        // Get the existing event data from the snapshot
         final Map<String, dynamic> existingData = docSnapshot.data()!;
         final EventModel oldEvent =
             EventModel.fromMap(existingData, id: docSnapshot.id);
 
+        // Get the new event data from the event
         final eventDetails = event.eventDetails;
+
+        // Create a new EventModel with the updated data
         EventModel eventModel = EventModel(
           userId: eventDetails.userId,
           title: eventDetails.title,
@@ -131,6 +155,7 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
           repeatEndOption: eventDetails.repeatEndOption,
         );
 
+        // Update the event in Firestore
         await _firestore
             .collection('events')
             .doc(event.eventId)
@@ -140,6 +165,9 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
             (Platform.isAndroid || Platform.isIOS) &&
             flutterLocalNotificationsPlugin != null) {
           final int notificationId = event.eventId.hashCode;
+
+          // If the smart reminder or start time has changed, cancel the old notification
+          // and schedule a new one
           if (oldEvent.smartReminder != eventDetails.smartReminder ||
               oldEvent.startTime != eventDetails.startTime) {
             await flutterLocalNotificationsPlugin?.cancel(notificationId);
@@ -169,6 +197,7 @@ class EventBloc extends Bloc<EventBlocEvent, EventBlocState> {
       emit(EventUpdatedFailure('Lỗi khi cập nhật sự kiện: $e'));
     }
   }
+
 
   // Thông báo nhắc nhở
 

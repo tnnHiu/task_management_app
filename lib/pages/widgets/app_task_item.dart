@@ -366,6 +366,7 @@ class _TaskItemState extends State<TaskItem> {
 
   // Hiển thị phần thông tin công việc
   Expanded _buildTaskInfo(String formattedDate) {
+    final isOverdue = widget.date != null && widget.date!.toDate().isBefore(DateTime.now());
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -382,7 +383,10 @@ class _TaskItemState extends State<TaskItem> {
           if (formattedDate.isNotEmpty)
             Text(
               formattedDate,
-              style: const TextStyle(color: Colors.white54, fontSize: 14.0),
+              style: TextStyle(
+                color: isOverdue ? Colors.red : Colors.white54,
+                fontSize: 14.0,
+              ),
             ),
         ],
       ),

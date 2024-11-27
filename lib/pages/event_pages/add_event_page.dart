@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../blocs/events/event_bloc.dart';
 import '../../blocs/events/event_bloc_event.dart';
-//widget
+// Widget tùy chỉnh
 import '../../pages/widgets/app_widget.dart';
 
 class AddEventPage extends StatefulWidget {
@@ -13,11 +13,15 @@ class AddEventPage extends StatefulWidget {
 }
 
 class _AddEventPageState extends State<AddEventPage> {
+  // Các bộ điều khiển TextField để nhập liệu
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  // Lấy userId từ Firebase Auth để liên kết sự kiện với người dùng
   final String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
+  // Các biến lưu thời gian, lặp lại và nhắc nhở
   DateTime? _startDateTime;
   DateTime? _endDateTime;
   String? _smartReminder = 'Không có';
@@ -26,6 +30,7 @@ class _AddEventPageState extends State<AddEventPage> {
   String? _selectedRepeatEndOption;
   String? _selectedRepeatOption;
 
+  // Các tùy chọn nhắc nhở thông minh
   final List<String> _reminderOptions = [
     'Không có',
     'Sớm 5p',
@@ -35,53 +40,7 @@ class _AddEventPageState extends State<AddEventPage> {
     'Nhắc nhở liên tục'
   ];
 
-  // Future<void> _selectDateTime(BuildContext context, bool isStart) async {
-  //   final DateTime? pickedDate = await showDatePicker(
-  //     context: context,
-  //     initialDate: DateTime.now(),
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2101),
-  //     builder: (BuildContext context, Widget? child) {
-  //       return Theme(
-  //         data: ThemeData.dark().copyWith(
-  //           colorScheme: const ColorScheme.dark(
-  //             primary: Colors.orange,
-  //             onPrimary: Colors.white,
-  //             surface: Color.fromARGB(255, 68, 65, 65),
-  //             onSurface: Colors.white,
-  //           ),
-  //           dialogBackgroundColor: Colors.grey[900],
-  //         ),
-  //         child: child!,
-  //       );
-  //     },
-  //   );
-  //
-  //   if (pickedDate != null) {
-  //     final TimeOfDay? pickedTime = await showTimePicker(
-  //       context: context,
-  //       initialTime: TimeOfDay.now(),
-  //     );
-  //
-  //     if (pickedTime != null) {
-  //       setState(() {
-  //         final dateTime = DateTime(
-  //           pickedDate.year,
-  //           pickedDate.month,
-  //           pickedDate.day,
-  //           pickedTime.hour,
-  //           pickedTime.minute,
-  //         );
-  //         if (isStart) {
-  //           _startDateTime = dateTime;
-  //         } else {
-  //           _endDateTime = dateTime;
-  //         }
-  //       });
-  //     }
-  //   }
-  // }
-
+  // Xử lý khi tùy chọn lặp lại thay đổi
   void _onRepeatOptionChanged(String? value) {
     setState(() {
       _selectedRepeatOption = value;
@@ -91,21 +50,25 @@ class _AddEventPageState extends State<AddEventPage> {
     });
   }
 
+  // Xử lý khi tùy chọn kết thúc lặp lại thay đổi
   void _onRepeatEndOptionChanged(String? value) {
     setState(() {
       _selectedRepeatEndOption = value;
       if (value == 'Ngày') {
-        _repeatEndDate = null;
+        _repeatEndDate = null; // Đặt lại ngày nếu chọn "Ngày"
       }
     });
   }
 
+  // Hàm thêm sự kiện
   void _addEvent() {
+    // Kiểm tra xem tất cả thông tin đã được điền hay chưa
     if (_titleController.text.isNotEmpty &&
         _locationController.text.isNotEmpty &&
         _descriptionController.text.isNotEmpty &&
         _startDateTime != null &&
         _endDateTime != null) {
+      // Tạo đối tượng EventDetails để lưu trữ thông tin sự kiện
       final eventDetails = EventDetails(
         userId: userId,
         title: _titleController.text,
@@ -119,15 +82,18 @@ class _AddEventPageState extends State<AddEventPage> {
         repeatEndOption: _selectedRepeatEndOption,
       );
 
+      // Gửi sự kiện AddEvent tới EventBloc
       BlocProvider.of<EventBloc>(context).add(AddEvent(
         eventDetails: eventDetails,
         userId: userId,
       ));
 
+      // Hiển thị thông báo thành công
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Sự kiện đã được thêm thành công')),
       );
     } else {
+      // Hiển thị thông báo lỗi nếu thông tin chưa đầy đủ
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Vui lòng điền đầy đủ thông tin')),
       );
@@ -137,24 +103,28 @@ class _AddEventPageState extends State<AddEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF242424),
+      backgroundColor: Color(0xFF242424), // Màu nền chính
       appBar: AppBar(
         title: Text('Thêm Sự Kiện', style: TextStyle(color: Colors.white)),
         centerTitle: true,
-        backgroundColor: Color(0xFF353535),
+        backgroundColor: Color(0xFF353535), // Màu nền AppBar
       ),
       body: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(15.0), // Khoảng cách xung quanh
         child: Column(
           children: [
+            // TextField nhập tiêu đề
             CustomTextField(controller: _titleController, hintText: 'Tiêu Đề'),
             SizedBox(height: 16.0),
+            // TextField nhập địa điểm
             CustomTextField(
                 controller: _locationController, hintText: 'Địa điểm'),
             SizedBox(height: 16.0),
+            // TextField nhập mô tả
             CustomTextField(
                 controller: _descriptionController, hintText: 'Mô tả'),
             SizedBox(height: 16.0),
+            // Bộ chọn thời gian bắt đầu
             CustomDateTimePicker(
               selectedDateTime: _startDateTime,
               onDateTimeChanged: (newDateTime) {
@@ -165,6 +135,7 @@ class _AddEventPageState extends State<AddEventPage> {
               label: 'Thời Gian Bắt Đầu',
             ),
             SizedBox(height: 16.0),
+            // Bộ chọn thời gian kết thúc
             CustomDateTimePicker(
               selectedDateTime: _endDateTime,
               onDateTimeChanged: (newDateTime) {
@@ -175,6 +146,7 @@ class _AddEventPageState extends State<AddEventPage> {
               label: 'Thời Gian Kết Thúc',
             ),
             SizedBox(height: 16.0),
+            // Tùy chọn lặp lại sự kiện
             RepeatOptions(
               selectedRepeatOption: _selectedRepeatOption,
               onRepeatOptionChanged: _onRepeatOptionChanged,
@@ -189,6 +161,7 @@ class _AddEventPageState extends State<AddEventPage> {
               },
             ),
             SizedBox(height: 16.0),
+            // Dropdown chọn nhắc nhở thông minh
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -197,12 +170,12 @@ class _AddEventPageState extends State<AddEventPage> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color.fromARGB(255, 196, 131, 9),
+                    color: Color.fromARGB(255, 196, 131, 9), // Màu nền dropdown
                   ),
                   child: DropdownButton<String>(
                     value: _smartReminder,
-                    dropdownColor: Color(0xFF353535),
-                    underline: SizedBox(),
+                    dropdownColor: Color(0xFF353535), // Màu nền menu dropdown
+                    underline: SizedBox(), // Bỏ gạch chân
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     style: TextStyle(color: Colors.white),
                     onChanged: (String? newValue) {
@@ -222,14 +195,15 @@ class _AddEventPageState extends State<AddEventPage> {
               ],
             ),
             SizedBox(height: 32.0),
+            // Nút Lưu Sự Kiện
             ElevatedButton(
-              onPressed: _addEvent,
+              onPressed: _addEvent, // Gọi hàm thêm sự kiện
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 196, 131, 9),
+                backgroundColor: Color.fromARGB(255, 196, 131, 9), // Màu nền
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10), // Bo góc
                 ),
               ),
               child: Text('Lưu Sự Kiện'),

@@ -11,6 +11,7 @@ import 'package:task_management_app/blocs/focus_mode/focus_mode_bloc.dart';
 import 'package:task_management_app/pages/auth_pages/auth_gate.dart';
 import 'package:task_management_app/services/firebase/firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'pages/Profile_pages/task_pa.dart';
 
 import '../blocs/events/event_bloc.dart';
 

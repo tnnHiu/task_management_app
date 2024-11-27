@@ -75,7 +75,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
       );
 
-      await userCredential.user?.updateDisplayName();
+      userCredential.user?.updateDisplayName(event.username);
 
       final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     

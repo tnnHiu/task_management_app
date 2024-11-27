@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management_app/blocs/task/task_bloc.dart';
 import 'package:task_management_app/pages/task_pages/add_task_page.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 import '../../blocs/home_page_navigation/home_page_navigation_bloc.dart';
 import '../../models/task_model.dart';
@@ -17,6 +18,8 @@ part 'RepeatOption.dart';
 part 'app_bottom_navigation_bar.dart';
 part 'app_floating_action_button.dart';
 part 'app_google_sign_in_button.dart';
+part 'PriorityPieChart.dart';
+part 'BarChart.dart';
 // part 'app_model_bottom_sheet.dart';
 part 'app_task_item.dart';
 part 'app_text_field.dart';

@@ -10,7 +10,7 @@ import '../../blocs/events/event_bloc_state.dart';
 import '../../pages/widgets/app_widget.dart';
 
 class EditEventPage extends StatefulWidget {
-  final event;
+  final dynamic event;
 
   const EditEventPage({super.key, required this.event});
 

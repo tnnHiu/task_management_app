@@ -199,17 +199,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
     );
   }
 
-  /// Opens a date picker dialog to select a date.
-  ///
-  /// This function presents a date picker to the user, allowing them to select
-  /// a date. The selected date is then stored in the [_selectedDate] variable
-  /// if it differs from the current value.
   Future<void> _selectDate(BuildContext context) async {
     // Show the date picker and wait for the user's selection.
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
+      firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
 
@@ -221,18 +216,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
   }
 
-  /// Adds a task to the database.
-  ///
-  /// This function is called when the user clicks the "Add task" button.
-  /// It takes the text from the name and description text fields, and the
-  /// selected priority, status, and deadline from the dropdown menus and
-  /// date picker, and adds a task to the database with the specified
-  /// details.
-  ///
-  /// The task is then added to the state of the [TaskBloc].
-  ///
-  /// After adding the task, the function navigates back to the previous
-  /// screen.
 
   void _addTask(BuildContext context) {
     final taskName = _nameController.text;
