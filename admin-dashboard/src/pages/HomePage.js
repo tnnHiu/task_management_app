@@ -95,7 +95,7 @@ const HomePage = () => {
 
   return (
     <div className="container">
-      <IconButton onClick={() => toggleSidebar(true)}>
+      <IconButton onClick={() => toggleSidebar(true)} style={{ color: 'white' }}>
         <MenuIcon />
       </IconButton>
 
@@ -104,7 +104,7 @@ const HomePage = () => {
           <ListItem button onClick={() => navigate('/')}>
             <ListItemText primary="Trang chủ" />
           </ListItem>
-          <ListItem button onClick={() => navigate('/events')}>
+          <ListItem button onClick={() => navigate('/event')}>
             <ListItemText primary="Sự kiện" />
           </ListItem>
           <ListItem button onClick={() => navigate('/user')}>

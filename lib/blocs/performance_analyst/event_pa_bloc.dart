@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../blocs/performance_analyst/event_pa_event.dart';
 import '../../blocs/performance_analyst/event_pa_state.dart';
@@ -16,6 +15,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
 
   Future<void> _onFetchEventStatistics(
   FetchEventStatistics event, Emitter<EventState> emit) async {
+    
   try {
     emit(EventLoading());
     final userId = _auth.currentUser?.uid;
@@ -31,25 +31,41 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     
     final events = querySnapshot.docs;
 
-    // Tiến hành tính toán số liệu thống kê
     int totalEvents = events.length;
     int participatedEvents = 0;
     int canceledEvents = 0;
     Duration totalParticipationTime = Duration.zero;
 
+    List<Map<String, dynamic>> participatedEventDetails = [];
+    List<Map<String, dynamic>> canceledEventDetails = [];
+
     for (var doc in events) {
       final data = doc.data();
       final status = data['status'] as String? ?? '';
+      final title = data['title'] as String? ?? 'Không có tiêu đề';
+      final location = data['location'] as String? ?? 'Không có địa điểm';
       final startTime = (data['startTime'] as Timestamp?)?.toDate();
       final endTime = (data['endTime'] as Timestamp?)?.toDate();
 
       if (status == 'active') {
         participatedEvents++;
+        participatedEventDetails.add({
+          'title': title,
+          'location': location,
+          'startTime': startTime,
+          'endTime': endTime,
+        });
         if (startTime != null && endTime != null) {
           totalParticipationTime += endTime.difference(startTime);
         }
       } else if (status == 'canceled') {
         canceledEvents++;
+        canceledEventDetails.add({
+          'title': title,
+          'location': location,
+          'startTime': startTime,
+          'endTime': endTime,
+        });
       }
     }
 
@@ -71,6 +87,8 @@ class EventBloc extends Bloc<EventEvent, EventState> {
       cancellationRate: cancellationRate,
       totalParticipationTime: totalParticipationTime,
       averageParticipationTime: averageParticipationTime,
+      participatedEventDetails: participatedEventDetails,
+      canceledEventDetails: canceledEventDetails,
     ));
   } catch (e) {
     emit(EventError(e.toString()));

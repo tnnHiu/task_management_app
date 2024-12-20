@@ -69,16 +69,13 @@ const UserPage = () => {
   return (
     <div className="container">
       <h1 className="title">DANH SÁCH NGƯỜI DÙNG</h1>
-      <Button variant="contained" color="primary" onClick={() => handleOpenDialog()}>
-        Thêm Người Dùng Mới
-      </Button>
       <div className="table-container" style={{ marginTop: '20px' }}>
         <Table className="task-table">
           <TableHead className="table-head">
             <TableRow>
               <TableCell  className="table-head-cell">Tên</TableCell>
               <TableCell  className="table-head-cell">Email</TableCell>
-              <TableCell  className="table-head-cell">Hành động</TableCell>
+              <TableCell  className="table-head-cell">ID</TableCell>
             </TableRow>
           </TableHead>
           <TableBody className="table-body">
@@ -86,15 +83,7 @@ const UserPage = () => {
               <TableRow key={user.id}>
                 <TableCell>{user.username}</TableCell>
                 <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => handleOpenDialog(user)}
-                  >
-                    Chỉnh sửa
-                  </Button>
-                </TableCell>
+                <TableCell>{user.userId}</TableCell>
               </TableRow>
             ))}
           </TableBody>

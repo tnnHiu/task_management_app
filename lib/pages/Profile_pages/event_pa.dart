@@ -96,7 +96,25 @@ class _EventStatisticsScreenState extends State<EventStatisticsScreen> {
                           title: "Tỷ lệ hủy",
                           value: "${state.cancellationRate.toStringAsFixed(2)}%",
                         ),
-                        
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Chi tiết sự kiện đã tham gia",
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                                ),
+                                _buildEventList(state.participatedEventDetails),
+                                const SizedBox(height: 16),
+                                Text(
+                                  "Chi tiết sự kiện bị hủy",
+                                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                                ),
+                                _buildEventList(state.canceledEventDetails),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -113,6 +131,52 @@ class _EventStatisticsScreenState extends State<EventStatisticsScreen> {
     );
   }
 }
+
+Widget _buildEventList(List<Map<String, dynamic>> events) {
+  return ListView.builder(
+    shrinkWrap: true,
+    physics: NeverScrollableScrollPhysics(),
+    itemCount: events.length,
+    itemBuilder: (context, index) {
+      final event = events[index];
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: Colors.grey[850],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                event['title'] ?? 'Không có tiêu đề',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Địa điểm: ${event['location']}",
+                style: const TextStyle(fontSize: 14, color: Colors.white70),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Bắt đầu: ${event['startTime'] != null ? event['startTime'].toString() : 'Không xác định'}",
+                style: const TextStyle(fontSize: 14, color: Colors.white70),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Kết thúc: ${event['endTime'] != null ? event['endTime'].toString() : 'Không xác định'}",
+                style: const TextStyle(fontSize: 14, color: Colors.white70),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
 
 
   Widget _buildStatisticCard({required String title, required String value}) {

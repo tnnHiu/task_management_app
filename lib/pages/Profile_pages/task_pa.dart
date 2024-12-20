@@ -51,7 +51,7 @@ class StatisticsPage extends StatelessWidget {
                         value: "${state.completionRate.toStringAsFixed(2)}%",
                       ),
                       PriorityBarChart(
-                        priorityRates: state.completionRatesByPriority, // Dữ liệu mới từ state
+                        priorityRates: state.completionRatesByPriority, 
                       ),
                       PriorityPieChart(priorityStats: state.priorityStats),
                       const Padding(

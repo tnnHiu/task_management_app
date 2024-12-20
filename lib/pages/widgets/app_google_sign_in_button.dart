@@ -28,7 +28,7 @@ class AppGoogleSignInButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Icon(Icons.add_box_sharp, color: Colors.red),
+            // Icon(Icons.add_box_sharp, color: Colors.red),
             Text(
               "Đăng nhập với Google",
               style: TextStyle(color: Colors.black),

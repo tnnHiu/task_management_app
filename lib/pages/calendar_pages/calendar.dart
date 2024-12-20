@@ -41,7 +41,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xFF242424),
       appBar: AppBar(
         title: Text('Calendar', style: TextStyle(color: Colors.white)),
         backgroundColor: Color(0xFF353535),
@@ -83,9 +83,22 @@ class _CalendarPageState extends State<CalendarPage> {
                 defaultTextStyle: TextStyle(color: Colors.white),
                 weekendTextStyle: TextStyle(color: Colors.red),
                 outsideTextStyle: TextStyle(color: Colors.grey),
+                selectedTextStyle: TextStyle(color: Colors.white),
+                // todayTextStyle: TextStyle(color: Colors.blue),
+              ),
+              headerStyle: HeaderStyle(
+                formatButtonVisible: false, // Ẩn nút "2 weeks"
+                titleTextStyle: TextStyle(
+                  color: Colors.white, 
+                  fontSize: 16, 
+                  fontWeight: FontWeight.bold,
+                ),
+                leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white),
+                rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white),
               ),
             ),
           ),
+          
           Expanded(
             child: BlocBuilder<EventBloc, EventBlocState>(
                 builder: (context, state) {

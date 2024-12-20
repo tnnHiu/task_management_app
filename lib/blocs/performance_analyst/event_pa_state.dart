@@ -1,6 +1,4 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class EventState extends Equatable {
   const EventState();
@@ -19,6 +17,8 @@ class EventLoaded extends EventState {
   final double cancellationRate;
   final Duration totalParticipationTime;
   final Duration averageParticipationTime;
+  final List<Map<String, dynamic>> participatedEventDetails;
+  final List<Map<String, dynamic>> canceledEventDetails;
 
   const EventLoaded({
     required this.totalEvents,
@@ -28,6 +28,8 @@ class EventLoaded extends EventState {
     required this.cancellationRate,
     required this.totalParticipationTime,
     required this.averageParticipationTime,
+    required this.participatedEventDetails,
+    required this.canceledEventDetails,
   });
 
   @override
