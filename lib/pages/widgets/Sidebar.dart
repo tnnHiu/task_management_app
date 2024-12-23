@@ -3,6 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../auth_pages/auth_gate.dart';
 import '../Profile_pages/task_pa.dart';
 import '../../pages/Profile_pages/event_pa.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../blocs/performance_analyst/focus_pa_bloc.dart';
+import '../../pages/Profile_pages/focus_pa.dart';
 
 class Sidebar extends StatelessWidget {
   @override
@@ -71,6 +75,18 @@ class Sidebar extends StatelessWidget {
             leading: Icon(Icons.rss_feed, color: Colors.orange,),
             title: Text('Thống kê focus mode', style: TextStyle(color: Colors.white),),
             onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider(
+                      create: (context) => PomodoroStatsBloc(
+                        firestore: FirebaseFirestore.instance,
+                        userId: FirebaseAuth.instance.currentUser!.uid,
+                      ),
+                      child: PomodoroStatsPage(),
+                    ),
+                  ),
+                );
             },
           ),
           Divider(),
