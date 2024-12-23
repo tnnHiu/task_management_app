@@ -420,11 +420,41 @@ class _TaskItemState extends State<TaskItem> {
     required void Function() onPressed,
   }) {
     return SlidableAction(
-      onPressed: (context) => onPressed(),
+      onPressed: (context) {
+        _showConfirmationDialog(context, onPressed);
+      },
       backgroundColor: backgroundColor,
       foregroundColor: foregroundColor,
       icon: icon,
       label: text,
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context, void Function() onConfirmed) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Xác nhận'),
+          content: const Text('Bạn có chắc muốn xóa không?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); 
+                onConfirmed();
+              },
+              child: const Text('Có'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); 
+              },
+              child: const Text('Không'),
+            ),
+            
+          ],
+        );
+      },
     );
   }
 }

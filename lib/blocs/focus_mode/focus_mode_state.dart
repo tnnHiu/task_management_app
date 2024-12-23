@@ -5,43 +5,26 @@ abstract class FocusModeState extends Equatable {
   final String timeStr;
   final bool isRunning;
 
-  const FocusModeState(
-    this.percent,
-    this.timeStr,
-    this.isRunning,
-  );
+  const FocusModeState(this.percent, this.timeStr, this.isRunning);
 
   @override
   List<Object> get props => [timeStr, percent];
 }
 
 class FocusModeInitialState extends FocusModeState {
-  const FocusModeInitialState(
-    String timeStr,
-    double percent,
-  ) : super(percent, timeStr, false);
+  const FocusModeInitialState(String timeStr, double percent) : super(percent, timeStr, false);
 }
 
 class FocusModeRunningState extends FocusModeState {
-  const FocusModeRunningState(
-    String timeStr,
-    double percent,
-  ) : super(percent, timeStr, true);
+  const FocusModeRunningState(String timeStr, double percent) : super(percent, timeStr, true);
 }
 
 class FocusModePausedState extends FocusModeState {
-  const FocusModePausedState(
-    String timeStr,
-    double percent,
-  ) : super(percent, timeStr, false);
+  const FocusModePausedState(String timeStr, double percent) : super(percent, timeStr, false);
 }
 
 class FocusModeResetState extends FocusModeState {
-  const FocusModeResetState(
-    String timeStr,
-    double percent,
-    bool isRunning,
-  ) : super(percent, timeStr, false);
+  const FocusModeResetState(String timeStr, double percent, bool isRunning) : super(percent, timeStr, false);
 }
 
 class FocusModeCompletedState extends FocusModeState {

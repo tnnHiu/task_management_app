@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:task_management_app/blocs/focus_mode/focus_mode_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../main.dart';
 
@@ -11,6 +12,8 @@ class FocusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // int minutes = 0;
+    // int seconds = 0;
     return BlocListener<FocusModeBloc, FocusModeState>(
       listener: (BuildContext context, FocusModeState state) {
         if (state is FocusModeCompletedState) {
@@ -20,6 +23,11 @@ class FocusPage extends StatelessWidget {
             ),
           );
           _showNotification();
+
+          // context.read<FocusModeBloc>().add(FocusModeCompletedEvent(
+          //   pomodoroDuration: (minutes * 60 + seconds),
+          //   userId: FirebaseAuth.instance.currentUser!.uid,
+          // ));
         }
       },
       child: BlocBuilder<FocusModeBloc, FocusModeState>(
@@ -44,11 +52,11 @@ class FocusPage extends StatelessWidget {
                     radius: 180,
                     lineWidth: 8,
                     percent: context.select(
-                      (FocusModeBloc bloc) => bloc.state.percent.toDouble(),
+                          (FocusModeBloc bloc) => bloc.state.percent.toDouble(),
                     ),
                     center: Text(
                       context.select(
-                        (FocusModeBloc bloc) => bloc.state.timeStr,
+                            (FocusModeBloc bloc) => bloc.state.timeStr,
                       ),
                       style: TextStyle(
                         color: Colors.white,
@@ -58,30 +66,24 @@ class FocusPage extends StatelessWidget {
                     progressColor: Colors.blue,
                   ),
                   const SizedBox(height: 40),
-                  // state.isRunning ?
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (state is! FocusModeInitialState) ...[
-                        FloatingActionButton(
-                          shape: CircleBorder(),
-                          backgroundColor: Colors.blue,
-                          elevation: 0,
-                          highlightElevation: 0,
-                          child: Icon(
-                            Icons.restart_alt,
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            context
-                                .read<FocusModeBloc>()
-                                .add(FocusModeResetEvent());
-                          },
+                      FloatingActionButton(
+                        shape: CircleBorder(),
+                        backgroundColor: Colors.blue,
+                        elevation: 0,
+                        highlightElevation: 0,
+                        child: const Icon(
+                          Icons.timer,
+                          size: 40,
+                          color: Colors.white,
                         ),
-                        const SizedBox(width: 20),
-                      ],
-                      // const SizedBox(width: 20),
+                        onPressed: () async {
+                          await _showTimePicker(context);
+                        },
+                      ),
+                      const SizedBox(width: 20),
                       FloatingActionButton(
                         shape: CircleBorder(),
                         backgroundColor: Colors.blue,
@@ -89,47 +91,23 @@ class FocusPage extends StatelessWidget {
                         highlightElevation: 0,
                         child: state.isRunning
                             ? const Icon(
-                                Icons.pause,
-                                size: 40,
-                                color: Colors.white,
-                              )
+                          Icons.pause,
+                          size: 40,
+                          color: Colors.white,
+                        )
                             : const Icon(
-                                Icons.play_arrow,
-                                size: 40,
-                                color: Colors.white,
-                              ),
+                          Icons.play_arrow,
+                          size: 40,
+                          color: Colors.white,
+                        ),
                         onPressed: () {
                           state.isRunning
-                              ? context
-                                  .read<FocusModeBloc>()
-                                  .add(FocusModePauseEvent())
-                              : context
-                                  .read<FocusModeBloc>()
-                                  .add(FocusModeStartEvent());
+                              ? context.read<FocusModeBloc>().add(FocusModePauseEvent())
+                              : context.read<FocusModeBloc>().add(FocusModeStartEvent());
                         },
                       ),
                     ],
-                  )
-                  // : ElevatedButton(
-                  //     style: ElevatedButton.styleFrom(
-                  //       backgroundColor: Colors.blue,
-                  //       padding: EdgeInsets.symmetric(
-                  //         horizontal: 40,
-                  //         vertical: 20,
-                  //       ),
-                  //     ),
-                  //     onPressed: () {
-                  //       context
-                  //           .read<FocusModeBloc>()
-                  //           .add(FocusModeStartEvent());
-                  //     },
-                  //     child: Text(
-                  //       "Bắt đầu",
-                  //       style: TextStyle(
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //   ),
+                  ),
                 ],
               ),
             ),
@@ -141,7 +119,7 @@ class FocusPage extends StatelessWidget {
 
   Future<void> _showNotification() async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
+    AndroidNotificationDetails(
       'focus_mode_channel',
       'Focus Mode',
       channelDescription: 'Notification for focus mode completion',
@@ -152,7 +130,7 @@ class FocusPage extends StatelessWidget {
       playSound: true,
     );
     const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
+    NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin?.show(
       0,
       'Focus Mode',
@@ -161,4 +139,106 @@ class FocusPage extends StatelessWidget {
       payload: 'Focus Mode Completed',
     );
   }
+
+  Future<void> _showTimePicker(BuildContext context) async {
+    int minutes = 25;
+    int seconds = 0;
+
+    // Show time picker dialog
+    await showDialog<int>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color(0xFF353535),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'Chọn thời gian',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 196, 131, 9),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Phút',
+                        labelStyle: const TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        minutes = int.tryParse(value) ?? 0;
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Giây',
+                        labelStyle: const TextStyle(color: Colors.white),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10), // Bo góc viền
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        seconds = int.tryParse(value) ?? 0;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Hủy',
+                style: TextStyle(color: Colors.red), // Đổi màu nút
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 196, 131, 9), // Đổi màu nút
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10), // Bo góc nút
+                ),
+              ),
+              onPressed: () {
+                context.read<FocusModeBloc>().add(FocusModeSetTimeEvent(minutes: minutes, seconds: seconds));
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                  'OK',
+                  style: TextStyle(color: Colors.white)
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }

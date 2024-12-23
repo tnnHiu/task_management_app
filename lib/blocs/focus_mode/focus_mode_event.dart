@@ -27,3 +27,27 @@ class FocusModeTickedEvent extends FocusModeEvent {
   @override
   List<Object> get props => [timeStr];
 }
+
+
+class FocusModeSetTimeEvent extends FocusModeEvent {
+  final int minutes;
+  final int seconds;
+
+  const FocusModeSetTimeEvent({required this.minutes, required this.seconds});
+
+  @override
+  List<Object> get props => [minutes, seconds];
+}
+
+class FocusModeCompletedEvent extends FocusModeEvent {
+  final int pomodoroDuration;
+  final String userId;
+
+  const FocusModeCompletedEvent({
+    required this.pomodoroDuration,
+    required this.userId,
+  });
+
+  @override
+  List<Object> get props => [pomodoroDuration, userId];
+}
