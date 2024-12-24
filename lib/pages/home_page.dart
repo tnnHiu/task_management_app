@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management_app/blocs/home_page_navigation/home_page_navigation_bloc.dart';
+import 'package:task_management_app/pages/chat_ai_pages/chat_ai_page.dart';
 import 'package:task_management_app/pages/task_pages/task_page.dart';
 import 'package:task_management_app/pages/widgets/app_widget.dart';
 
@@ -40,11 +41,11 @@ class HomePage extends StatelessWidget {
           return TaskPage();
         case 1:
           return CalendarPage();
-        // case 2:
-        //   return Center(child: Text("Tasks Page"));
         case 2:
           return SearchPage();
         case 3:
+          return ChatAIPage();
+        case 4:
           if (kIsWeb) {
             return Container();
           }

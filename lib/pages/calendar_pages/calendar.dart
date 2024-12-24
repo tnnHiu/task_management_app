@@ -10,6 +10,8 @@ import '/blocs/events/event_bloc_state.dart';
 import '../../../pages/event_pages/edit_event_page.dart';
 
 class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
+
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
@@ -25,18 +27,6 @@ class _CalendarPageState extends State<CalendarPage> {
     _selectedDay = DateTime.now();
     _focusedDay = DateTime.now();
   }
-
-  // void _logDateToFirebase(String formattedDate) async {
-  //   try {
-  //     await FirebaseFirestore.instance.collection('logs').add({
-  //       'selected_date': formattedDate,
-  //       'timestamp': FieldValue.serverTimestamp(),
-  //     });
-  //     print("Ngày đã được log vào Firebase: $formattedDate");
-  //   } catch (e) {
-  //     print("Lỗi khi ghi log vào Firebase: $e");
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -89,16 +79,17 @@ class _CalendarPageState extends State<CalendarPage> {
               headerStyle: HeaderStyle(
                 formatButtonVisible: false, // Ẩn nút "2 weeks"
                 titleTextStyle: TextStyle(
-                  color: Colors.white, 
-                  fontSize: 16, 
+                  color: Colors.white,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
                 leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white),
-                rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white),
+                rightChevronIcon:
+                    Icon(Icons.chevron_right, color: Colors.white),
               ),
             ),
           ),
-          
+
           Expanded(
             child: BlocBuilder<EventBloc, EventBlocState>(
                 builder: (context, state) {
@@ -171,7 +162,7 @@ class EventTile extends StatelessWidget {
 class EventDetailDialog extends StatelessWidget {
   final event;
 
-  EventDetailDialog({required this.event});
+  const EventDetailDialog({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {

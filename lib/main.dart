@@ -4,11 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:task_management_app/blocs/auth/auth_bloc.dart';
 import 'package:task_management_app/blocs/focus_mode/focus_mode_bloc.dart';
 import 'package:task_management_app/pages/auth_pages/auth_gate.dart';
+import 'package:task_management_app/services/consts.dart';
 import 'package:task_management_app/services/firebase/firebase_options.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'pages/Profile_pages/task_pa.dart';
@@ -21,6 +23,10 @@ final FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin =
         : null;
 
 Future<void> main() async {
+  Gemini.init(apiKey: GEMINI_API_KEY);
+
+
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

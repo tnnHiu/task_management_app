@@ -30,7 +30,12 @@ class AppBottomNavigationBar extends StatelessWidget {
               ),
               label: "",
             ),
-
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.rocket,
+              ),
+              label: "",
+            ),
             if (!kIsWeb)
               BottomNavigationBarItem(
                 icon: Icon(
@@ -38,13 +43,6 @@ class AppBottomNavigationBar extends StatelessWidget {
                 ),
                 label: "",
               ),
-
-            // BottomNavigationBarItem(
-            //   icon: Icon(
-            //     Icons.more_horiz_sharp,
-            //   ),
-            //   label: "",
-            // ),
           ],
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.white38,
